@@ -21,6 +21,7 @@ typedef struct {
 typedef struct {
     OrbitParams orbitparams;
     Color color;
+    char* name;
 } Planet;
 
 #endif

@@ -4,7 +4,17 @@
 #include "planet.h"
 
 typedef struct {
+    int x;
+    int y;
+} Point;
+
+typedef struct {
     Planet* planets;
+    int planetCount;
+    int planetCapacity;
+
+    Point center;
+    
     int elapsedTime;
 } Scene;
 
