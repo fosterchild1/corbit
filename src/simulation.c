@@ -2,19 +2,19 @@
 #include <stdlib.h>
 #include "../include/simulation.h"
 
-#define M_PI 3.14159265358979323846
-
 void AddToScene(Scene* scene, Planet* planet) {
     int currSize = scene->planetCapacity;
     int neededSize = scene->planetCount + 1;
-
+    
+    // resize if needed
     if (neededSize > currSize) {
         if (currSize == 0) currSize = 1;
+        int newSize = currSize * 2;
 
-        Planet* temp = realloc(scene->planets, sizeof(Planet)*currSize*2);
+        Planet* temp = realloc(scene->planets, sizeof(Planet) * newSize);
         if (temp == NULL) exit(0);
         
-        scene->planetCapacity = currSize * 2;
+        scene->planetCapacity = newSize;
         scene->planets = temp;
     }
     
@@ -27,7 +27,10 @@ void StepSimulation(Scene* scene, int seconds) {
         Planet* planet = &scene->planets[i];
         OrbitParams* orbit = &planet->orbitparams;
 
-        double delta = (2*M_PI)/sqrt(pow(orbit->smaxis, 3)) * seconds;
+        // get delta and keep between 0-tau
+        double delta = M_TAU/sqrt(pow(orbit->smaxis, 3)) * seconds;
         orbit->mna += delta;
+        orbit->inclination+=0.01;
+        if (orbit->mna > M_TAU) orbit->mna -= M_TAU;
     } 
 }

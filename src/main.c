@@ -3,11 +3,9 @@
 #include "../include/simulation.h"
 #include "../include/render.h"
 
-#define M_PI 3.14159265358979323846
-
 int main() {
     int width, height;
-	initscr(); noecho();
+	initscr(); noecho(); curs_set(0);
     getmaxyx(stdscr, height, width);
     
     Scene tes = {NULL, 0, 0, {width/2, height/2}, 0};
@@ -16,7 +14,7 @@ int main() {
     Planet te = {t, {255, 255, 255}, "test"};
     AddToScene(&tes, &te);
 
-    OrbitParams t2 = {30, 3.4, 0, 0.5, 0.8, 0};
+    OrbitParams t2 = {30, 3.4, 1.3, 0.5, 0.8, 0.5};
     Planet te2 = {t2, {255, 255, 255}, "test2"};
     AddToScene(&tes, &te2);
 
