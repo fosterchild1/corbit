@@ -20,22 +20,21 @@ float CalculateEccentricAnomaly(double mna, float ecc) {
     return E;
 }
 
-void RenderOrbit(OrbitParams orbit, Point center) {
+Point RenderOrbit(OrbitParams orbit, Point center) {
     float ecc = orbit.eccentricity;
     double w = orbit.lpe;
     
     int a = orbit.smaxis;
     int b = (int)(sqrt(1-ecc*ecc)*a); // semi minor axis
     int max = (a > b) ? a : b;
-    float step = 0.5/max;
+    float step = 0.005/max;
 
     int focusShift = a * ecc;
     int xc = center.x;
     int yc = center.y;
 
     // render elipse
-    for (float theta = 0.0; theta < 2 * M_PI; theta += step) 
-    {
+    for (float theta = 0.0; theta < 2 * M_PI; theta += step) {
         float xLocal = a * cos(theta) - focusShift;
         float yLocal = b * sin(theta);
         
@@ -52,13 +51,27 @@ void RenderOrbit(OrbitParams orbit, Point center) {
     int planetX = round(xc + (planetXLocal * cos(w) - planetYLocal * sin(w)));
     int planetY = round(yc - (planetXLocal * sin(w) + planetYLocal * cos(w)));
     mvaddch(planetY, planetX, 'O');
+    
+    Point planetPos = {planetX, planetY};
+    return planetPos;
+}
+
+void RenderName(Point pos, char* name) {
+    mvaddstr(pos.y-1, pos.x+2, name);
 }
 
 void RenderScene(Scene scene) {
     Point center = scene.center;
     mvaddch(center.y, center.x, '*');
-
+    
+    // render planet orbits and the planet themselves
+    Point planetPositions[scene.planetCount];
     for (int i = 0; i < scene.planetCount; i++) {
-        RenderOrbit(scene.planets[i].orbitparams, center);
+        planetPositions[i] = RenderOrbit(scene.planets[i].orbitparams, center);
+    }
+
+    // render planet names
+    for (int i = 0; i < scene.planetCount; i++) {
+        RenderName(planetPositions[i], scene.planets[i].name);
     }
 }

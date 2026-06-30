@@ -16,7 +16,7 @@ int main() {
     Planet te = {t, {255, 255, 255}, "test"};
     AddToScene(&tes, &te);
 
-    OrbitParams t2 = {30,33.4, 0, 0.5, 0.8, 0};
+    OrbitParams t2 = {30, 3.4, 0, 0.5, 0.8, 0};
     Planet te2 = {t2, {255, 255, 255}, "test2"};
     AddToScene(&tes, &te2);
 
@@ -26,7 +26,7 @@ int main() {
         refresh();
 
 	    getch();
-        clear();
+        erase();
     }
 
 	endwin();
