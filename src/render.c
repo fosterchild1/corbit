@@ -16,7 +16,11 @@ float CalculateEccentricAnomaly(double mna, float ecc) {
 
         E -= f/fPrime;
     }
-
+    char str[10];
+    sprintf(str, "%f", mna);
+    int a, b;
+    getmaxyx(stdscr, a, b);
+    mvprintw(b/2, a/2, str);
     return E;
 }
 
@@ -33,6 +37,7 @@ void RenderOrbit(OrbitParams orbit, Point center) {
     int xc = center.x;
     int yc = center.y;
 
+    // render elipse
     for (float theta = 0.0; theta < 2 * M_PI; theta += step) 
     {
         float xLocal = a * cos(theta) - focusShift;
