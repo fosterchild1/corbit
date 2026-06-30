@@ -8,15 +8,20 @@
 int main() {
     int width, height;
 	initscr(); noecho();
-    getmaxyx(stdscr,width, height);
+    getmaxyx(stdscr, height, width);
+    float ecc = 0;
+    while (true) {
+        ecc += 0.05;
+        OrbitParams t = {17, 0.6, 0, ecc, 0.85, 0};
+        Planet te = {t, {255, 255, 255}, "test"};
+        Scene tes = {&te, 1, 1, {width/2, height/2}, 0};
+        RenderScene(tes);
+        refresh();
 
-    OrbitParams t = {3, 0, 0, 0, 0, 0};
-    Planet te = {t, {255, 255, 255}, "test"};
-    Scene tes = {&te, 1, 1, {width/2, height/2}, 0};
-    RenderScene(tes);
+	    getch();
+        clear();
+    }
 
-	refresh();
-	getch();
 	endwin();
 	return 0;
 }
