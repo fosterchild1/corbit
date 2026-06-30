@@ -1,7 +1,7 @@
 #ifndef RENDER_H
 #define RENDER_H
 
-#include "scene.h"
+#include "simulation.h"
 
 void RenderScene(Scene scene);
 

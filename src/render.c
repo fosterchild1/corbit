@@ -1,6 +1,6 @@
 #include <ncurses.h>
 #include <math.h>
-#include "../include/scene.h"
+#include "../include/simulation.h"
 
 #define M_PI 3.14159265358979323846
 
@@ -16,11 +16,7 @@ float CalculateEccentricAnomaly(double mna, float ecc) {
 
         E -= f/fPrime;
     }
-    char str[10];
-    sprintf(str, "%f", mna);
-    int a, b;
-    getmaxyx(stdscr, a, b);
-    mvprintw(b/2, a/2, str);
+    
     return E;
 }
 
@@ -42,9 +38,9 @@ void RenderOrbit(OrbitParams orbit, Point center) {
     {
         float xLocal = a * cos(theta) - focusShift;
         float yLocal = b * sin(theta);
-
-        int x = (int)(xc + (xLocal * cos(w) - yLocal * sin(w)) + 0.5);
-        int y = (int)(yc - (xLocal * sin(w) + yLocal * cos(w)) + 0.5);
+        
+        int x = round(xc + (xLocal * cos(w) - yLocal * sin(w)));
+        int y = round(yc - (xLocal * sin(w) + yLocal * cos(w)));
         mvaddch(y, x, '.');
     }
 
@@ -53,13 +49,16 @@ void RenderOrbit(OrbitParams orbit, Point center) {
     int planetXLocal = a * cos(E) - focusShift;
     int planetYLocal = b * sin(E);
 
-    int planetX = (int)(xc + (planetXLocal * cos(w) - planetYLocal * sin(w)) + 0.5);
-    int planetY = (int)(yc - (planetXLocal * sin(w) + planetYLocal * cos(w)) + 0.5);
+    int planetX = round(xc + (planetXLocal * cos(w) - planetYLocal * sin(w)));
+    int planetY = round(yc - (planetXLocal * sin(w) + planetYLocal * cos(w)));
     mvaddch(planetY, planetX, 'O');
 }
 
 void RenderScene(Scene scene) {
     Point center = scene.center;
     mvaddch(center.y, center.x, '*');
-    RenderOrbit(scene.planets->orbitparams, center);
+
+    for (int i = 0; i < scene.planetCount; i++) {
+        RenderOrbit(scene.planets[i].orbitparams, center);
+    }
 }
