@@ -3,7 +3,7 @@ SRCDIR := src
 BUILDDIR := build
 BINDIR := bin
 CFLAGS := -std=c99 -O2 -Wall -Wextra -Wshadow -Werror
-TARGET := $(BINDIR)/thing
+TARGET := $(BINDIR)/corbit
 SRCEXT := c
 
 SOURCES := $(wildcard $(SRCDIR)/*.$(SRCEXT))

@@ -5,17 +5,21 @@
 
 int main() {
     int width, height;
-	initscr(); noecho(); curs_set(0);
+	initscr(); noecho(); curs_set(0); start_color();
     getmaxyx(stdscr, height, width);
     
     Scene tes = {NULL, 0, 0, {width/2, height/2}, 0};
-
-    OrbitParams t = {17, 0.6, 0, 0.6, 0.0, 0};
-    Planet te = {t, {255, 255, 255}, "test"};
-    AddToScene(&tes, &te);
+    
+    for (int i = 0; i<500; i++) {
+        OrbitParams t = {17, 3.4, 1.3, 0.6, 0.8, i};
+        Color tcolor = {255, i, 0, 0};
+        Planet te = CreatePlanet(&t, &tcolor, "test");
+        AddToScene(&tes, &te);
+    }
 
     OrbitParams t2 = {30, 3.4, 1.3, 0.5, 0.8, 0.5};
-    Planet te2 = {t2, {255, 255, 255}, "test2"};
+    Color tcolor2 = {255, 0, 0, 0};
+    Planet te2 = CreatePlanet(&t2, &tcolor2, "test2");
     AddToScene(&tes, &te2);
 
     while (true) {

@@ -30,6 +30,8 @@ typedef struct {
     int elapsedTime;
 } Scene;
 
+Planet CreatePlanet(OrbitParams* params, Color* color, char* name);
+
 void AddToScene(Scene* scene, Planet* planet);
 
 void StepSimulation(Scene* scene, int seconds);

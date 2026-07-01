@@ -44,12 +44,13 @@ void RenderOrbit(Planet planet, Point center) {
     int max = (a > b) ? a : b;
     float step = 0.5/max;
 
+    int focusShift = a * ecc;
     int xc = center.x;
     int yc = center.y;
 
     // render elipse
     for (float theta = 0.0; theta < M_TAU; theta += step) {
-        float xLocal = a * (cos(theta) - ecc);
+        float xLocal = a * cos(theta) - focusShift;
         float yLocal = b * sin(theta);
         
         FPoint3 point = GetPointOnEllipse(xLocal, yLocal, lan, omega, i);
@@ -57,6 +58,16 @@ void RenderOrbit(Planet planet, Point center) {
 
         mvaddch(yc-camY, xc+point.x, '.');
     }
+
+    // render planet via keplers equation
+    float E = CalculateEccentricAnomaly(orbit.mna, ecc);
+    int planetXLocal = a * cos(E) - focusShift;
+    int planetYLocal = b * sin(E);
+    
+    FPoint3 planetPos = GetPointOnEllipse(planetXLocal, planetYLocal, lan, omega, i);
+    float camY = planetPos.y * sin(VIEW_RAD) - planetPos.z * cos(VIEW_RAD);
+
+    mvaddch(yc-camY, xc+planetPos.x, 'O' | COLOR_PAIR(planet.color.colorID)); 
 }
 
 void RenderPlanet(Planet planet, Point center) {
@@ -70,12 +81,13 @@ void RenderPlanet(Planet planet, Point center) {
     int a = orbit.smaxis;
     int b = (int)(sqrt(1-ecc*ecc)*a); // semi minor axis
 
+    int focusShift = a * ecc;
     int xc = center.x;
     int yc = center.y;
 
     // render planet via keplers equation
     float E = CalculateEccentricAnomaly(orbit.mna, ecc);
-    int planetXLocal = a * (cos(E) - ecc);
+    int planetXLocal = a * cos(E) - focusShift;
     int planetYLocal = b * sin(E);
     
     FPoint3 planetPos = GetPointOnEllipse(planetXLocal, planetYLocal, lan, omega, i);
@@ -85,10 +97,7 @@ void RenderPlanet(Planet planet, Point center) {
     mvaddch(yc-camY, xc+planetPos.x, 'O' | COLOR_PAIR(planet.color.colorID)); 
 
     // render name
-    char* name = planet.name;
-    attron(COLOR_PAIR(planet.color.colorID));
-    mvaddstr(yc-camY-1, xc+planetPos.x+2, name);
-    attroff(COLOR_PAIR(planet.color.colorID));
+    mvaddstr(yc-camY-1, xc+planetPos.x+2, name | COLOR_PAIR(planet.color.colorID));
 }
 
 void RenderScene(Scene scene) {
