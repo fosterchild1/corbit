@@ -33,6 +33,7 @@ FPoint3 GetPointOnElipse(float xLocal, float yLocal, float trigArr[6]) {
 void RenderOrbit(Planet planet, Point center) {
     OrbitParams orbit = planet.orbitparams;
     float ecc = orbit.eccentricity;
+    float viewRad = VIEW_ANGLE * M_PI/180.0;
 
     // build trig array
     double lan = orbit.lan;
@@ -55,7 +56,7 @@ void RenderOrbit(Planet planet, Point center) {
         float yLocal = b * sinf(theta);
         
         FPoint3 point = GetPointOnElipse(xLocal, yLocal, trigArr);
-        float camY = point.y * sin(VIEW_RAD) - point.z * cos(VIEW_RAD);
+        float camY = point.y * sin(viewRad) - point.z * cos(viewRad);
         
         mvaddch(yc-camY, xc+point.x, '.' | COLOR_PAIR(planet.color.colorID));
     }
@@ -63,8 +64,9 @@ void RenderOrbit(Planet planet, Point center) {
 
 void RenderPlanet(Planet planet, Point center) {
     OrbitParams orbit = planet.orbitparams;
-
     float ecc = orbit.eccentricity;
+    float viewRad = VIEW_ANGLE * M_PI/180.0;
+
 
     // build trig array
     double lan = orbit.lan;
@@ -84,7 +86,7 @@ void RenderPlanet(Planet planet, Point center) {
     int planetYLocal = b * sinf(E);
     
     FPoint3 planetPos = GetPointOnElipse(planetXLocal, planetYLocal, trigArr);
-    float camY = planetPos.y * sin(VIEW_RAD) - planetPos.z * cos(VIEW_RAD);
+    float camY = planetPos.y * sin(viewRad) - planetPos.z * cos(viewRad);
 
     // render planet
     mvaddch(yc-camY, xc+planetPos.x, 'O' | COLOR_PAIR(planet.color.colorID)); 

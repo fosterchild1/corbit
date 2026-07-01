@@ -50,12 +50,14 @@ void AddToScene(Scene* scene, Planet* planet) {
 }
 
 void StepSimulation(Scene* scene, int seconds) {
+    float time = seconds/100.0;
+
     for (int i = 0; i < scene->planetCount; i++) {
         Planet* planet = &scene->planets[i];
         OrbitParams* orbit = &planet->orbitparams;
 
         // get delta and keep between 0-tau
-        double delta = M_TAU/sqrt(pow(orbit->smaxis, 3)) * seconds;
+        double delta = M_TAU/sqrt(pow(orbit->smaxis, 3)) * time;
         orbit->mna += delta;
         if (orbit->mna > M_TAU) orbit->mna -= M_TAU;
     } 
@@ -74,5 +76,4 @@ void RotateScene(Scene* scene, float lpe, float lan, float inc) {
         if (orbit->lan > M_TAU) orbit->lan -= M_TAU;
         if (orbit->inclination > M_TAU) orbit->inclination -= M_TAU;
     } 
-
 }
