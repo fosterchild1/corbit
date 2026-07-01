@@ -9,16 +9,18 @@ InputBind bindFunctions[512];
 
 void RotateUp(Scene* scene) {
     (void)scene;
+    Camera* camera = &scene->camera;
 
-    VIEW_ANGLE += ROT_AMT*180;
-    if (VIEW_ANGLE > 360) VIEW_ANGLE-=360;
+    camera->viewAngle += ROT_AMT*180;
+    if (camera->viewAngle > 360) camera->viewAngle-=360;
 }
 
 void RotateDown(Scene* scene) {
     (void)scene;
+    Camera* camera = &scene->camera;
 
-    VIEW_ANGLE -= ROT_AMT*180;
-    if (VIEW_ANGLE < 0) VIEW_ANGLE+=360;
+    camera->viewAngle -= ROT_AMT*180;
+    if (camera->viewAngle > 360) camera->viewAngle-=360;
 }
 
 void RotateRight(Scene* scene) {

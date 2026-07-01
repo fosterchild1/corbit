@@ -8,7 +8,7 @@ float CalculateEccentricAnomaly(double mna, float ecc) {
     // f'(x) = 1 - e*cos E
     float E = mna;
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 5; i++) {
         float f = E - ecc*sinf(E)-mna;
         float fPrime = 1 - ecc*cosf(E);
 
@@ -30,10 +30,10 @@ FPoint3 GetPointOnElipse(float xLocal, float yLocal, float trigArr[6]) {
     return (FPoint3){x, y, z};
 }
 
-void RenderOrbit(Planet planet, Point center) {
+void RenderOrbit(Planet planet, Camera camera, Point center) {
     OrbitParams orbit = planet.orbitparams;
     float ecc = orbit.eccentricity;
-    float viewRad = VIEW_ANGLE * M_PI/180.0;
+    float viewRad = camera.viewAngle * M_PI/180.0;
 
     // build trig array
     double lan = orbit.lan;
@@ -62,11 +62,10 @@ void RenderOrbit(Planet planet, Point center) {
     }
 }
 
-void RenderPlanet(Planet planet, Point center) {
+void RenderPlanet(Planet planet, Camera camera, Point center) {
     OrbitParams orbit = planet.orbitparams;
     float ecc = orbit.eccentricity;
-    float viewRad = VIEW_ANGLE * M_PI/180.0;
-
+    float viewRad = camera.viewAngle * M_PI/180.0;
 
     // build trig array
     double lan = orbit.lan;
@@ -82,8 +81,8 @@ void RenderPlanet(Planet planet, Point center) {
 
     // render planet via keplers equation
     float E = CalculateEccentricAnomaly(orbit.mna, ecc);
-    int planetXLocal = a * (cosf(E) - ecc);
-    int planetYLocal = b * sinf(E);
+    float planetXLocal = a * (cosf(E) - ecc);
+    float planetYLocal = b * sinf(E);
     
     FPoint3 planetPos = GetPointOnElipse(planetXLocal, planetYLocal, trigArr);
     float camY = planetPos.y * sin(viewRad) - planetPos.z * cos(viewRad);
@@ -103,12 +102,12 @@ void RenderScene(Scene scene) {
     
     // render planet orbits
     for (int i = 0; i < scene.planetCount; i++) {
-        RenderOrbit(scene.planets[i], center);
+        RenderOrbit(scene.planets[i], scene.camera, center);
     }
 
     // render planets and their names
     for (int i = 0; i < scene.planetCount; i++) {
-        RenderPlanet(scene.planets[i], center);
+        RenderPlanet(scene.planets[i], scene.camera, center);
     }
 
     mvaddch(center.y, center.x, '*');
