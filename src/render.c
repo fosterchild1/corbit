@@ -9,8 +9,8 @@ float CalculateEccentricAnomaly(double mna, float ecc) {
     float E = mna;
 
     for (int i = 0; i < 10; i++) {
-        float f = E - ecc*sin(E)-mna;
-        float fPrime = 1 - ecc*cos(E);
+        float f = E - ecc*sinf(E)-mna;
+        float fPrime = 1 - ecc*cosf(E);
 
         E -= f/fPrime;
     }
@@ -48,6 +48,7 @@ void RenderOrbit(Planet planet, Point center) {
 
     int xc = center.x;
     int yc = center.y;
+
     // render elipse
     for (float theta = 0.0; theta < M_TAU; theta += step) {
         float xLocal = a * (cosf(theta) - ecc);
@@ -55,8 +56,8 @@ void RenderOrbit(Planet planet, Point center) {
         
         FPoint3 point = GetPointOnElipse(xLocal, yLocal, trigArr);
         float camY = point.y * sin(VIEW_RAD) - point.z * cos(VIEW_RAD);
-
-        mvaddch(yc-camY, xc+point.x, '.');
+        
+        mvaddch(yc-camY, xc+point.x, '.' | COLOR_PAIR(planet.color.colorID));
     }
 }
 

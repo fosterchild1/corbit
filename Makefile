@@ -2,7 +2,7 @@ CC := gcc
 SRCDIR := src
 BUILDDIR := build
 BINDIR := bin
-CFLAGS := -std=c99 -O2 -Wall -Wextra -Wshadow -Werror
+CFLAGS := -std=c11 -O2 -Wall -Wextra -Wshadow -Werror
 TARGET := $(BINDIR)/corbit
 SRCEXT := c
 

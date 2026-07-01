@@ -18,8 +18,10 @@ Planet CreatePlanet(OrbitParams* orbit, Color* color, char* name) {
         short b = (color->B * 1000) / 255;
 
         init_color(colorID, r, g, b);
+        init_color(colorID+1, r-20, g-20, b-20);
         init_pair(colorID, colorID, COLOR_BLACK);
-
+        init_pair(colorID+1, colorID+1, COLOR_BLACK);
+        
         color->colorID = colorID;
         colorID++;
     }
@@ -57,4 +59,20 @@ void StepSimulation(Scene* scene, int seconds) {
         orbit->mna += delta;
         if (orbit->mna > M_TAU) orbit->mna -= M_TAU;
     } 
+}
+
+void RotateScene(Scene* scene, float lpe, float lan, float inc) {
+    for (int i = 0; i < scene->planetCount; i++) {
+        Planet* planet = &scene->planets[i];
+        OrbitParams* orbit = &planet->orbitparams;
+
+        orbit->lpe += lpe;
+        orbit->lan += lan;
+        orbit->inclination += inc;
+
+        if (orbit->lpe > M_TAU) orbit->lpe -= M_TAU;
+        if (orbit->lan > M_TAU) orbit->lan -= M_TAU;
+        if (orbit->inclination > M_TAU) orbit->inclination -= M_TAU;
+    } 
+
 }
