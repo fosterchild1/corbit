@@ -18,12 +18,11 @@ float CalculateEccentricAnomaly(double mna, float ecc) {
     return E;
 }
 
-FPoint3 GetPointOnEllipse(float xLocal, float yLocal, double lan, double omega, float i) {
-    // thanks superchil for this... monstrosity...
-    float sinOmega = sinf(omega); float cosOmega = cosf(omega);
-    float sinLan = sinf(lan); float cosLan = cosf(lan);
-    float sinInc = sinf(i); float cosInc = cosf(i);
-    
+FPoint3 GetPointOnElipse(float xLocal, float yLocal, float trigArr[6]) {
+    float sinOmega = trigArr[0]; float cosOmega = trigArr[1];
+    float sinLan = trigArr[2]; float cosLan = trigArr[3];
+    float sinInc = trigArr[4]; float cosInc = trigArr[5];
+
     float x = xLocal * (cosOmega * cosLan - sinOmega * sinLan * cosInc) - yLocal * (sinOmega * cosLan + cosOmega * sinLan * cosInc);
     float y = xLocal * (cosOmega * sinLan + sinOmega * cosLan * cosInc) - yLocal * (sinOmega * sinLan - cosOmega * cosLan * cosInc);
     float z = xLocal * (sinOmega * sinInc)                                    + yLocal * (cosOmega * sinInc);
@@ -33,26 +32,28 @@ FPoint3 GetPointOnEllipse(float xLocal, float yLocal, double lan, double omega, 
 
 void RenderOrbit(Planet planet, Point center) {
     OrbitParams orbit = planet.orbitparams;
-
     float ecc = orbit.eccentricity;
+
+    // build trig array
     double lan = orbit.lan;
     double omega = orbit.lpe - lan;
     float i = orbit.inclination;
-    
+    float trigArr[6] = {sinf(omega), cosf(omega), sinf(lan), cosf(lan), sinf(i), cosf(i)};
+
     int a = orbit.smaxis;
     int b = (int)(sqrt(1-ecc*ecc)*a); // semi minor axis
+
     int max = (a > b) ? a : b;
     float step = 0.5/max;
 
     int xc = center.x;
     int yc = center.y;
-
     // render elipse
     for (float theta = 0.0; theta < M_TAU; theta += step) {
-        float xLocal = a * (cos(theta) - ecc);
-        float yLocal = b * sin(theta);
+        float xLocal = a * (cosf(theta) - ecc);
+        float yLocal = b * sinf(theta);
         
-        FPoint3 point = GetPointOnEllipse(xLocal, yLocal, lan, omega, i);
+        FPoint3 point = GetPointOnElipse(xLocal, yLocal, trigArr);
         float camY = point.y * sin(VIEW_RAD) - point.z * cos(VIEW_RAD);
 
         mvaddch(yc-camY, xc+point.x, '.');
@@ -63,9 +64,12 @@ void RenderPlanet(Planet planet, Point center) {
     OrbitParams orbit = planet.orbitparams;
 
     float ecc = orbit.eccentricity;
+
+    // build trig array
     double lan = orbit.lan;
     double omega = orbit.lpe - lan;
     float i = orbit.inclination;
+    float trigArr[6] = {sinf(omega), cosf(omega), sinf(lan), cosf(lan), sinf(i), cosf(i)};
     
     int a = orbit.smaxis;
     int b = (int)(sqrt(1-ecc*ecc)*a); // semi minor axis
@@ -75,10 +79,10 @@ void RenderPlanet(Planet planet, Point center) {
 
     // render planet via keplers equation
     float E = CalculateEccentricAnomaly(orbit.mna, ecc);
-    int planetXLocal = a * (cos(E) - ecc);
-    int planetYLocal = b * sin(E);
+    int planetXLocal = a * (cosf(E) - ecc);
+    int planetYLocal = b * sinf(E);
     
-    FPoint3 planetPos = GetPointOnEllipse(planetXLocal, planetYLocal, lan, omega, i);
+    FPoint3 planetPos = GetPointOnElipse(planetXLocal, planetYLocal, trigArr);
     float camY = planetPos.y * sin(VIEW_RAD) - planetPos.z * cos(VIEW_RAD);
 
     // render planet

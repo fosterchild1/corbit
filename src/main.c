@@ -10,7 +10,7 @@ int main() {
     
     Scene tes = {NULL, 0, 0, {width/2, height/2}, 0};
     
-    for (int i = 0; i<500; i++) {
+    for (int i = 0; i<5000; i++) {
         OrbitParams t = {17, 3.4, 1.3, 0.6, 0.8, i};
         Color tcolor = {255, i, 0, 0};
         Planet te = CreatePlanet(&t, &tcolor, "test");
