@@ -19,7 +19,7 @@ typedef struct {
 
 typedef struct {
     float viewAngle;
-    float zoomAmt;
+    float zoom;
 } Camera;
 
 typedef struct {

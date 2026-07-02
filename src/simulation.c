@@ -3,7 +3,27 @@
 #include <stdlib.h>
 #include "../include/simulation.h"
 
-short colorID=16;
+#define colorSub(c) (((c) > 30) ? ((c) - 30) : 0)
+
+static short colorID=16;
+
+void InitPlanetColors(short id, Color color) {
+    // convert them into ncurses format
+    short planetR = (color.R * 1000) / 255;
+    short planetG = (color.G * 1000) / 255;
+    short planetB = (color.B * 1000) / 255;
+    
+    short orbitR = (colorSub(color.R) * 1000) / 255;
+    short orbitG = (colorSub(color.G) * 1000) / 255;
+    short orbitB = (colorSub(color.B) * 1000) / 255; 
+
+    init_color(id, planetR, planetG, planetB);
+    init_color(id+1, orbitR, orbitG, orbitB);
+
+    init_pair(id, id, COLOR_BLACK);
+    init_pair(id+1, id+1, COLOR_BLACK);
+}
+
 Planet CreatePlanet(OrbitParams* orbit, Color* color, char* name) {
     // initialize color
     if (colorID > COLORS) {
@@ -12,18 +32,9 @@ Planet CreatePlanet(OrbitParams* orbit, Color* color, char* name) {
         color->colorID = randId;
 
     } else {
-        // convert them into ncurses format
-        short r = (color->R * 1000) / 255;
-        short g = (color->G * 1000) / 255;
-        short b = (color->B * 1000) / 255;
-
-        init_color(colorID, r, g, b);
-        init_color(colorID+1, r-20, g-20, b-20);
-        init_pair(colorID, colorID, COLOR_BLACK);
-        init_pair(colorID+1, colorID+1, COLOR_BLACK);
-        
+        InitPlanetColors(colorID, *color);
         color->colorID = colorID;
-        colorID++;
+        colorID += 2;
     }
 
     return (Planet){*orbit, *color, name};

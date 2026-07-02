@@ -4,13 +4,23 @@
 #include "../include/simulation.h"
 #include "../include/render.h"
 
+void Initncurses() {
+    initscr();
+    noecho(); 
+    cbreak(); 
+    curs_set(0);
+    start_color();
+    nodelay(stdscr, TRUE);
+    keypad(stdscr, TRUE);
+}
+
 int main() {
     int width, height;
-    initscr(); noecho(); cbreak(); curs_set(0); start_color(); nodelay(stdscr, TRUE); keypad(stdscr, TRUE);
+    Initncurses();
     getmaxyx(stdscr, height, width);
 
     InitBinds();
-    Scene tes = {NULL, 0, 0, {width/2, height/2}, {90, 0}, 0};
+    Scene tes = {NULL, 0, 0, {width/2, height/2}, {90, 1}, 0};
     
     OrbitParams t = {17, 3.4, 1.3, 0.6, 0.8, -0.3};
     Color tcolor = {255, 255, 0, 0};
@@ -24,6 +34,7 @@ int main() {
     
     while (true) {
         RenderScene(tes);
+        RenderBinds();
         StepSimulation(&tes, 1);
         HandleInput(&tes, getch());
 

@@ -6,6 +6,8 @@
 typedef void (*InputBind)(Scene* scene);
 
 void InitBinds();
+void RenderBinds();
+
 void HandleInput(Scene* scene, int ip);
 
 #endif

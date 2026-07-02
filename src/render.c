@@ -3,37 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../include/simulation.h"
+#include "../include/mathutil.h"
 
-int8_t* depthBuf;
-
-float CalculateEccentricAnomaly(double mna, float ecc) {
-    // use newton-raphson to approximate E.
-    // f(x) = E - e*sin E - M
-    // f'(x) = 1 - e*cos E
-    float E = mna;
-
-    for (int i = 0; i < 5; i++) {
-        float f = E - ecc * sinf(E) - mna;
-        float fPrime = 1 - ecc * cosf(E);
-
-        E -= f/fPrime;
-    }
-    
-    return E;
-}
-
-FPoint3 GetPointOnElipse(float xLocal, float yLocal, float trigArr[6]) {
-    float sinOmega = trigArr[0]; float cosOmega = trigArr[1];
-    float sinLan = trigArr[2]; float cosLan = trigArr[3];
-    float sinInc = trigArr[4]; float cosInc = trigArr[5];
-
-    // thanks superchil for this monstrosity
-    float x = xLocal * (cosOmega * cosLan - sinOmega * sinLan * cosInc) - yLocal * (sinOmega * cosLan + cosOmega * sinLan * cosInc);
-    float y = xLocal * (cosOmega * sinLan + sinOmega * cosLan * cosInc) - yLocal * (sinOmega * sinLan - cosOmega * cosLan * cosInc);
-    float z = xLocal * (sinOmega * sinInc)                                    + yLocal * (cosOmega * sinInc);
-
-    return (FPoint3){x, y, z};
-}
+static int8_t* depthBuf;
 
 void RenderOrbit(Planet planet, Camera camera, Point center) {
     OrbitParams orbit = planet.orbitparams;
@@ -46,7 +18,7 @@ void RenderOrbit(Planet planet, Camera camera, Point center) {
     float i = orbit.inclination;
     float trigArr[6] = {sinf(omega), cosf(omega), sinf(lan), cosf(lan), sinf(i), cosf(i)};
 
-    int a = orbit.smaxis;
+    int a = orbit.smaxis * camera.zoom;
     int b = (int)(sqrt(1 - ecc*ecc) * a); // semi minor axis
 
     int max = (a > b) ? a : b;
@@ -58,22 +30,28 @@ void RenderOrbit(Planet planet, Camera camera, Point center) {
     // render elipse
     int lastY = 0; int lastX = 0;
     for (float theta = 0.0; theta < M_TAU; theta += step) {
+        // get camera x and y
         float xLocal = a * (cosf(theta) - ecc);
         float yLocal = b * sinf(theta);
         
         FPoint3 point = GetPointOnElipse(xLocal, yLocal, trigArr);
 
         float camY = point.y * sin(viewRad) - point.z * cos(viewRad);
+
         int targetY = yc-camY; int targetX = xc+point.x;
-        if (targetY == lastY && targetX == lastX) continue;
+        // ensure targetY and targetX are on screen
+        if ((targetY == lastY && targetX == lastX) || 
+            (targetY >= yc*2 || targetX >= xc*2)   ||
+            (targetY < 0 || targetX < 0)) continue;
 
         // get depth
         int8_t depth = point.y * cos(viewRad) + point.z * sin(viewRad);
         int depthIdx = (targetY * xc * 2) + targetX;
-        if (depthBuf[depthIdx] < depth) continue;
+        if (depthBuf[depthIdx] <= depth) continue;
         
+        depthBuf[depthIdx] = depth;
         lastY = targetY; lastX = targetX;
-        mvaddch(targetY, targetX, '.' | COLOR_PAIR(planet.color.colorID));
+        mvaddch(targetY, targetX, '.' | COLOR_PAIR(planet.color.colorID+1));
     }
 }
 
@@ -88,7 +66,7 @@ void RenderPlanet(Planet planet, Camera camera, Point center) {
     float i = orbit.inclination;
     float trigArr[6] = {sinf(omega), cosf(omega), sinf(lan), cosf(lan), sinf(i), cosf(i)};
     
-    int a = orbit.smaxis;
+    int a = orbit.smaxis * camera.zoom;
     int b = (int)(sqrt(1 - ecc*ecc) * a); // semi minor axis
 
     int xc = center.x;
@@ -113,17 +91,16 @@ void RenderPlanet(Planet planet, Camera camera, Point center) {
 }
 
 void RenderScene(Scene scene) {
-    // create depth buffer
-    if (depthBuf == NULL) {
-        int bufSize = scene.center.x * scene.center.y * 4;
-        depthBuf = (int8_t*)malloc(bufSize * sizeof(int8_t));
-        if (depthBuf == NULL) exit(0);
-        
-        memset(depthBuf, INT8_MAX, bufSize);
-    }
-    
     Point center = scene.center;
-    
+
+    // handle depth buffer
+    int bufSize = center.x * center.y * 4;
+    if (depthBuf == NULL) {
+        depthBuf = malloc(bufSize * sizeof(int8_t));
+        if (depthBuf == NULL) exit(0);
+    }
+    memset(depthBuf, INT8_MAX, bufSize);
+
     // render planet orbits
     for (int i = 0; i < scene.planetCount; i++) {
         RenderOrbit(scene.planets[i], scene.camera, center);
