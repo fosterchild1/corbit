@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "../include/input.h"
 #include "../include/simulation.h"
+#include "../include/mathutil.h"
 
 const float ROT_AMT = M_TAU/200;
 
@@ -34,11 +35,11 @@ void RotateLeft(Scene* scene) {
 }
 
 void ZoomIn(Scene* scene) {
-    scene->camera.zoom+=0.05;
+    scene->camera.zoom += 0.05;
 }
 
 void ZoomOut(Scene* scene) {
-    scene->camera.zoom-=0.05;
+    scene->camera.zoom = max(scene->camera.zoom - 0.05, 0.05);
 }
 
 void ExitProgram(Scene* scene) { (void)scene; endwin(); exit(0); }

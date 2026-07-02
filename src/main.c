@@ -20,23 +20,23 @@ int main() {
     getmaxyx(stdscr, height, width);
 
     InitBinds();
-    Scene tes = {NULL, 0, 0, {width/2, height/2}, {90, 1}, 0};
+    Scene mainScene = {NULL, 0, 0, {width/2, height/2}, {90, 1}, 0};
     
     OrbitParams t = {17, 3.4, 1.3, 0.6, 0.8, -0.3};
     Color tcolor = {255, 255, 0, 0};
     Planet te = CreatePlanet(&t, &tcolor, "test");
-    AddToScene(&tes, &te);
+    AddToScene(&mainScene, &te);
 
     OrbitParams t2 = {30, 3.4, 1.3, 0.5, 0.8, 0.5};
     Color tcolor2 = {255, 0, 0, 0};
     Planet te2 = CreatePlanet(&t2, &tcolor2, "test2");
-    AddToScene(&tes, &te2);
+    AddToScene(&mainScene, &te2);
     
     while (true) {
-        RenderScene(tes);
+        RenderScene(mainScene);
         RenderBinds();
-        StepSimulation(&tes, 1);
-        HandleInput(&tes, getch());
+        StepSimulation(&mainScene, 1);
+        HandleInput(&mainScene, getch());
 
         napms(16);
         refresh();

@@ -19,6 +19,8 @@ void RenderOrbit(Planet planet, Camera camera, Point center) {
     float trigArr[6] = {sinf(omega), cosf(omega), sinf(lan), cosf(lan), sinf(i), cosf(i)};
 
     int a = orbit.smaxis * camera.zoom;
+    if (a == 0) return;
+
     int b = (int)(sqrt(1 - ecc*ecc) * a); // semi minor axis
 
     int max = (a > b) ? a : b;
@@ -67,6 +69,7 @@ void RenderPlanet(Planet planet, Camera camera, Point center) {
     float trigArr[6] = {sinf(omega), cosf(omega), sinf(lan), cosf(lan), sinf(i), cosf(i)};
     
     int a = orbit.smaxis * camera.zoom;
+    if (a == 0) return;
     int b = (int)(sqrt(1 - ecc*ecc) * a); // semi minor axis
 
     int xc = center.x;

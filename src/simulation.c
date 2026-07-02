@@ -16,7 +16,7 @@ void InitPlanetColors(short id, Color color) {
     short orbitR = (colorSub(color.R) * 1000) / 255;
     short orbitG = (colorSub(color.G) * 1000) / 255;
     short orbitB = (colorSub(color.B) * 1000) / 255; 
-
+    
     init_color(id, planetR, planetG, planetB);
     init_color(id+1, orbitR, orbitG, orbitB);
 

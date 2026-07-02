@@ -29,3 +29,7 @@ FPoint3 GetPointOnElipse(float xLocal, float yLocal, float trigArr[6]) {
 
     return (FPoint3){x, y, z};
 }
+
+void* max(void* a, void* b) {
+    return (a > b) ? a : b;
+}
