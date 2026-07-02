@@ -4,8 +4,6 @@
 #include "../include/simulation.h"
 #include "../include/render.h"
 
-float VIEW_ANGLE = 0;
-
 int main() {
     int width, height;
     initscr(); noecho(); cbreak(); curs_set(0); start_color(); nodelay(stdscr, TRUE); keypad(stdscr, TRUE);

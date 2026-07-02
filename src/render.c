@@ -1,6 +1,10 @@
 #include <ncurses.h>
 #include <math.h>
+#include <stdlib.h>
+#include <string.h>
 #include "../include/simulation.h"
+
+int8_t* depthBuf;
 
 float CalculateEccentricAnomaly(double mna, float ecc) {
     // use newton-raphson to approximate E.
@@ -9,8 +13,8 @@ float CalculateEccentricAnomaly(double mna, float ecc) {
     float E = mna;
 
     for (int i = 0; i < 5; i++) {
-        float f = E - ecc*sinf(E)-mna;
-        float fPrime = 1 - ecc*cosf(E);
+        float f = E - ecc * sinf(E) - mna;
+        float fPrime = 1 - ecc * cosf(E);
 
         E -= f/fPrime;
     }
@@ -23,6 +27,7 @@ FPoint3 GetPointOnElipse(float xLocal, float yLocal, float trigArr[6]) {
     float sinLan = trigArr[2]; float cosLan = trigArr[3];
     float sinInc = trigArr[4]; float cosInc = trigArr[5];
 
+    // thanks superchil for this monstrosity
     float x = xLocal * (cosOmega * cosLan - sinOmega * sinLan * cosInc) - yLocal * (sinOmega * cosLan + cosOmega * sinLan * cosInc);
     float y = xLocal * (cosOmega * sinLan + sinOmega * cosLan * cosInc) - yLocal * (sinOmega * sinLan - cosOmega * cosLan * cosInc);
     float z = xLocal * (sinOmega * sinInc)                                    + yLocal * (cosOmega * sinInc);
@@ -42,7 +47,7 @@ void RenderOrbit(Planet planet, Camera camera, Point center) {
     float trigArr[6] = {sinf(omega), cosf(omega), sinf(lan), cosf(lan), sinf(i), cosf(i)};
 
     int a = orbit.smaxis;
-    int b = (int)(sqrt(1-ecc*ecc)*a); // semi minor axis
+    int b = (int)(sqrt(1 - ecc*ecc) * a); // semi minor axis
 
     int max = (a > b) ? a : b;
     float step = 0.5/max;
@@ -51,14 +56,24 @@ void RenderOrbit(Planet planet, Camera camera, Point center) {
     int yc = center.y;
 
     // render elipse
+    int lastY = 0; int lastX = 0;
     for (float theta = 0.0; theta < M_TAU; theta += step) {
         float xLocal = a * (cosf(theta) - ecc);
         float yLocal = b * sinf(theta);
         
         FPoint3 point = GetPointOnElipse(xLocal, yLocal, trigArr);
+
         float camY = point.y * sin(viewRad) - point.z * cos(viewRad);
+        int targetY = yc-camY; int targetX = xc+point.x;
+        if (targetY == lastY && targetX == lastX) continue;
+
+        // get depth
+        int8_t depth = point.y * cos(viewRad) + point.z * sin(viewRad);
+        int depthIdx = (targetY * xc * 2) + targetX;
+        if (depthBuf[depthIdx] < depth) continue;
         
-        mvaddch(yc-camY, xc+point.x, '.' | COLOR_PAIR(planet.color.colorID));
+        lastY = targetY; lastX = targetX;
+        mvaddch(targetY, targetX, '.' | COLOR_PAIR(planet.color.colorID));
     }
 }
 
@@ -74,7 +89,7 @@ void RenderPlanet(Planet planet, Camera camera, Point center) {
     float trigArr[6] = {sinf(omega), cosf(omega), sinf(lan), cosf(lan), sinf(i), cosf(i)};
     
     int a = orbit.smaxis;
-    int b = (int)(sqrt(1-ecc*ecc)*a); // semi minor axis
+    int b = (int)(sqrt(1 - ecc*ecc) * a); // semi minor axis
 
     int xc = center.x;
     int yc = center.y;
@@ -98,6 +113,15 @@ void RenderPlanet(Planet planet, Camera camera, Point center) {
 }
 
 void RenderScene(Scene scene) {
+    // create depth buffer
+    if (depthBuf == NULL) {
+        int bufSize = scene.center.x * scene.center.y * 4;
+        depthBuf = (int8_t*)malloc(bufSize * sizeof(int8_t));
+        if (depthBuf == NULL) exit(0);
+        
+        memset(depthBuf, INT8_MAX, bufSize);
+    }
+    
     Point center = scene.center;
     
     // render planet orbits
