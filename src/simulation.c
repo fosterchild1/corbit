@@ -1,7 +1,7 @@
 #include <math.h>
 #include <ncurses.h>
 #include <stdlib.h>
-#include "../include/simulation.h"
+#include "simulation.h"
 
 #define colorSub(c) (((c) > 30) ? ((c) - 30) : 0)
 

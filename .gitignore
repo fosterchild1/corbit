@@ -3,4 +3,6 @@ build/
 
 *.out
 *.o
+
 *.exrc
+compile_commands.json

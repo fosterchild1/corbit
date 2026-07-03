@@ -1,5 +1,6 @@
 #include <math.h>
-#include "../include/simulation.h"
+#include <stdlib.h>
+#include "simulation.h"
 
 float CalculateEccentricAnomaly(double mna, float ecc) {
     // use newton-raphson to approximate E.
@@ -30,6 +31,20 @@ FPoint3 GetPointOnElipse(float xLocal, float yLocal, float trigArr[6]) {
     return (FPoint3){x, y, z};
 }
 
-void* max(void* a, void* b) {
-    return (a > b) ? a : b;
+int strToInt(char* str) {
+    int num = 1;
+   
+    // handle sign
+    char* p = str;
+    if (*p == '-') num = -1;
+    p++;
+
+    while (*p != '\0') {
+        if (!(*p >= '0' && *p <= '9')) return 0;
+        
+        num = num * 10 + *p - '0';
+        p++;
+    }
+
+    return num;
 }

@@ -1,8 +1,8 @@
 #include <ncurses.h>
 #include <stdlib.h>
-#include "../include/input.h"
-#include "../include/simulation.h"
-#include "../include/mathutil.h"
+#include "input.h"
+#include "simulation.h"
+#include "util.h"
 
 const float ROT_AMT = M_TAU/200;
 
@@ -44,11 +44,12 @@ void ZoomOut(Scene* scene) {
 
 void ExitProgram(Scene* scene) { (void)scene; endwin(); exit(0); }
 
-void ToggleBinds() {
+void ToggleBinds(Scene* scene) {
+    (void)scene;
     ShouldRenderBinds = !ShouldRenderBinds;
 }
 
-void InitBinds() {
+void InitBinds(void) {
     bindFunctions[KEY_UP] = RotateUp;
     bindFunctions[KEY_DOWN] = RotateDown;
     bindFunctions[KEY_RIGHT] = RotateRight;
@@ -65,7 +66,7 @@ void InitBinds() {
 
 void HandleInput(Scene* scene, int ip) {
     if (ip == ERR) return;
-    mvprintw(10, 10, "%d", ip); 
+    
     if (ip >= 0 && ip < 512 && bindFunctions[ip] != NULL) {
         bindFunctions[ip](scene);
     }
@@ -77,7 +78,7 @@ void ReverseStr(int y, int x, char* str) {
     attroff(A_REVERSE);
 }
 
-void RenderBinds() {
+void RenderBinds(void) {
     if (!ShouldRenderBinds) return;
 
     int height, width;

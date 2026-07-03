@@ -1,10 +1,11 @@
 #include <ncurses.h>
-#include "../include/planet.h"
-#include "../include/input.h"
-#include "../include/simulation.h"
-#include "../include/render.h"
+#include "input.h"
+#include "simulation.h"
+#include "render.h"
+#include "cli.h"
+#include <stdlib.h>
 
-void Initncurses() {
+void Initncurses(void) {
     initscr();
     noecho(); 
     cbreak(); 
@@ -14,11 +15,12 @@ void Initncurses() {
     keypad(stdscr, TRUE);
 }
 
-int main() {
+int main(int charc, char* argv[]) {
     int width, height;
     Initncurses();
     getmaxyx(stdscr, height, width);
-
+    CLIConfig config = ParseCLI(charc, argv);
+    
     InitBinds();
     Scene mainScene = {NULL, 0, 0, {width/2, height/2}, {90, 1}, 0};
     
@@ -35,7 +37,7 @@ int main() {
     while (true) {
         RenderScene(mainScene);
         RenderBinds();
-        StepSimulation(&mainScene, 1);
+        StepSimulation(&mainScene, config.time);
         HandleInput(&mainScene, getch());
 
         napms(16);
