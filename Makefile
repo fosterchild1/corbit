@@ -28,4 +28,8 @@ $(BINDIR):
 clean:
 	rm -rf $(BUILDDIR) $(BINDIR)
 
+install:
+	mkdir -p $(HOME)/.config/corbit
+	cp systems $(HOME)/.config/corbit
+
 .PHONY: all clean

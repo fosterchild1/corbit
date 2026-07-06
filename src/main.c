@@ -19,7 +19,6 @@ int main(int charc, char* argv[]) {
     CLIConfig config = ParseCLI(charc, argv);
 
     int width, height;
-    (void)height; (void)width;
     Initncurses();
     getmaxyx(stdscr, height, width);
     
