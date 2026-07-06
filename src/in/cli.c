@@ -4,12 +4,11 @@
 #include "util.h"
 #include "cli.h"
 
-const char* HELP_TEXT = "Usage: corbit [OPTIONS]... \
-CLI arguments: \
--t --time [TIME]       advance TIME step each tick \
--s --system [SYSTEM]     system to simulate \
-\
-Available systems: sol,jov,sat,nep,ura,ker,plu";
+const char* HELP_TEXT = "Usage: corbit [OPTIONS]...\n" 
+"CLI arguments:\n"
+"-t --time [TIME]       advance TIME step each tick\n"
+"-s --system [SYSTEM]     system to simulate\n"
+"Available systems: sol,jov,sat,nep,ura,ker,plu";
 
 const CLIConfig DEFAULT_CONFIG = {1, "sol"};
 
@@ -25,16 +24,25 @@ int ContainsEqual(char* str) {
 
 void DisplayHelpText(void) {
     printf("%s", HELP_TEXT);
-
-    endwin();
     exit(EXIT_SUCCESS);
 }
 
+void HandleArgument(CLIConfig* config, char* key, char* value) {
+    // mega ugly
+    if (value == NULL && (strcmp(key, "h")==0 || strcmp(key, "help")==0)) DisplayHelpText();
+    if (value == NULL) return;
+
+    if (strcmp(key, "t")==0 || strcmp(key, "time")==0) { config->time = StrToInt(value); return; }
+
+    if (strcmp(key, "s")==0 || strcmp(key, "system")==0) { config->system = value; return; }
+
+}
+
 CLIConfig ParseCLI(int argc, char* argv[]) {
-    if (argc == 0) return DEFAULT_CONFIG;
+    if (argc <= 1) return DEFAULT_CONFIG;
     CLIConfig config = DEFAULT_CONFIG;
    
-    char* lastArg;
+    char* lastArg = NULL;
     for (int i = 1; i < argc; i++) {
         char* fullArg = argv[i];
         
@@ -47,13 +55,10 @@ CLIConfig ParseCLI(int argc, char* argv[]) {
             continue;
         }
         
-        if (lastArg == NULL) continue;
-
-        // handle arguments.. ugly.
-        if (strcmp(lastArg, "t") || strcmp(lastArg, "time")) { config.time = strToInt(fullArg); continue; }
-
-        if (strcmp(lastArg, "s") || strcmp(lastArg, "system")) { config.system = fullArg; continue; }
+        HandleArgument(&config, lastArg, fullArg);
     }
+
+    HandleArgument(&config, lastArg, NULL);
     
     return config;
 }

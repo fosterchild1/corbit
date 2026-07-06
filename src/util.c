@@ -1,5 +1,8 @@
 #include <math.h>
+#include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
 #include "simulation.h"
 
 float CalculateEccentricAnomaly(double mna, float ecc) {
@@ -26,25 +29,72 @@ FPoint3 GetPointOnElipse(float xLocal, float yLocal, float trigArr[6]) {
     // thanks superchil for this monstrosity
     float x = xLocal * (cosOmega * cosLan - sinOmega * sinLan * cosInc) - yLocal * (sinOmega * cosLan + cosOmega * sinLan * cosInc);
     float y = xLocal * (cosOmega * sinLan + sinOmega * cosLan * cosInc) - yLocal * (sinOmega * sinLan - cosOmega * cosLan * cosInc);
-    float z = xLocal * (sinOmega * sinInc)                                    + yLocal * (cosOmega * sinInc);
+    float z = xLocal * (sinOmega * sinInc)                              + yLocal * (cosOmega * sinInc);
 
     return (FPoint3){x, y, z};
 }
 
-int strToInt(char* str) {
-    int num = 1;
-   
-    // handle sign
-    char* p = str;
-    if (*p == '-') num = -1;
-    p++;
+char* Strsub(char* str, int startIdx, int endIdx) {
+    if (endIdx <= startIdx) return "";
 
+    int len = endIdx - startIdx;
+    char* result = malloc((len + 1) * sizeof(char));
+    strncpy(result, str + startIdx, len);
+    result[len] = '\0';
+
+    return result;
+}
+
+int StrToInt(char* str) {
+    int num = 0;
+    char* p = str;
+
+    // handle sign
+    bool neg = false;
+    if (*p == '-') { neg = true; p++; }
+    
     while (*p != '\0') {
         if (!(*p >= '0' && *p <= '9')) return 0;
         
-        num = num * 10 + *p - '0';
+        num = num * 10 + (*p - '0');
+        p++;
+    }
+        
+    return neg ? -num : num;
+}
+
+double StrToDouble(char* str) {
+    double num = 0;
+    char* p = str;
+
+    // handle sign
+    bool neg = false;
+    if (*p == '-') { neg = true; p++; }
+
+    bool fraction = false;
+    int fractionAmt = 1;
+
+    while (*p != '\0') {
+        char c = *p;
+        if (c == '.' || c == ',') { fraction = true; p++; continue; }
+
+        if (!(c >= '0' && c <= '9') && (c != '.' && c != ',')) return 0;
+        
+        if (fraction) {
+            num += (c - '0') / pow(10, fractionAmt);
+            fractionAmt++;
+        } else
+            num = num * 10 + (c - '0'); 
+
         p++;
     }
 
-    return num;
+    return neg ? -num : num;
+}
+
+Color HexToRGB(int hex) {
+    int r = ((hex >> 16) & 0xFF);
+    int g = ((hex >> 8) & 0xFF);
+    int b = (hex & 0xFF);
+    return (Color){r, g, b, 0};
 }

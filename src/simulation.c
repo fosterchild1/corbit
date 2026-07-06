@@ -36,7 +36,7 @@ Planet CreatePlanet(OrbitParams* orbit, Color* color, char* name) {
         color->colorID = colorID;
         colorID += 2;
     }
-
+    printf("ok\n\n");
     return (Planet){*orbit, *color, name};
 }
 
