@@ -8,7 +8,7 @@ const char* HELP_TEXT = "Usage: corbit [OPTIONS]...\n"
 "CLI arguments:\n"
 "-t --time [TIME]       advance TIME step each tick\n"
 "-s --system [SYSTEM]     system to simulate\n"
-"Available systems: sol,jov,sat,nep,ura,ker,plu";
+"Available systems: sol,jov,sat,ura,nep,plu,ker";
 
 const CLIConfig DEFAULT_CONFIG = {1, "sol"};
 

@@ -32,9 +32,9 @@ int main(int charc, char* argv[]) {
         RenderBinds();
         StepSimulation(&mainScene, config.time);
         HandleInput(&mainScene, getch());
+        refresh();
 
         napms(16);
-        refresh();
         erase();
     }
 

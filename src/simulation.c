@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "simulation.h"
 
-#define colorSub(c) (((c) > 30) ? ((c) - 30) : 0)
+#define colorSub(c) (((c) > 30) ? ((c) - 40) : 0)
 
 static short colorID=16;
 

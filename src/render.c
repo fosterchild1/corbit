@@ -36,7 +36,7 @@ void RenderOrbit(Planet planet, Camera camera, Point center) {
         
         FPoint3 point = GetPointOnElipse(xLocal, yLocal, trigArr);
 
-        float camY = point.y * sin(viewRad) - point.z * cos(viewRad);
+        float camY = point.y * sinf(viewRad) - point.z * cosf(viewRad);
 
         int targetY = yc-camY; int targetX = xc+point.x;
         // ensure targetY and targetX are on screen
@@ -45,7 +45,7 @@ void RenderOrbit(Planet planet, Camera camera, Point center) {
             (targetY < 0 || targetX < 0)) continue;
 
         // get depth
-        int8_t depth = point.y * cos(viewRad) + point.z * sin(viewRad);
+        int8_t depth = point.y * cosf(viewRad) + point.z * sinf(viewRad);
         int depthIdx = (targetY * xc * 2) + targetX;
         if (depthBuf[depthIdx] <= depth) continue;
         

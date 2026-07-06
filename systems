@@ -1,90 +1,471 @@
+for planets: 
+    colors: their color is any hex color converted to decimal
+    lpe, lan, mna, and inc are all in radians
+    values with decimals MUST use "," and not dots
+indentation is not required
+
 .sol
--Mercury
-#col 8025969
+    -Mercury
+        #col 8025969
 
-#sma 10,353321
-#lpe 1,354432
-#lan 0,842953
-#mna 3,470119
-#ecc 0,205638
-#inc 0,122232
+        #sma 10,353321
+        #lpe 1,354432
+        #lan 0,842953
+        #mna 3,470119
+        #ecc 0,205638
+        #inc 0,122232
 
--Venus
-#col 14797464
+    -Venus
+        #col 14797464
 
-#sma 14,354009
-#lpe 2,296532
-#lan 1,338321
-#mna 1,328372
-#ecc 0,006777
-#inc 0,059248
+        #sma 14,354009
+        #lpe 2,296532
+        #lan 1,338321
+        #mna 1,328372
+        #ecc 0,006777
+        #inc 0,059248
 
--Earth
-#col 33023
+    -Earth
+        #col 33023
 
-#sma 18,932901
-#lpe 1,798101
-#lan 0,000000
-#mna 3,175697
-#ecc 0,016702
-#inc 0,000000
+        #sma 18,932901
+        #lpe 1,798101
+        #lan 0,000000
+        #mna 3,175697
+        #ecc 0,016702
+        #inc 0,000000
 
--Mars
-#col 12665870
+    -Mars
+        #col 12665870
 
-#sma 24,328325
-#lpe 5,867087
-#lan 0,863622
-#mna 0,938402
-#ecc 0,093415
-#inc 0,032245
+        #sma 24,328325
+        #lpe 5,867087
+        #lan 0,863622
+        #mna 0,938402
+        #ecc 0,093415
+        #inc 0,032245
 
--Jupiter
-#col 14003331
+    -Jupiter
+        #col 14003331
 
-#sma 36,437941
-#lpe 0,251125
-#lan 1,754549
-#mna 1,831710
-#ecc 0,048350
-#inc 0,022757
+        #sma 46,437941
+        #lpe 0,251125
+        #lan 1,754549
+        #mna 1,831710
+        #ecc 0,048350
+        #inc 0,022757
 
--Saturn
-#col 15654575
+    -Saturn
+        #col 15654575
 
-#sma 46,452621
-#lpe 1,618885
-#lan 1,982502
-#mna 4,916576
-#ecc 0,054048
-#inc 0,043380
+        #sma 56,452621
+        #lpe 1,618885
+        #lan 1,982502
+        #mna 4,916576
+        #ecc 0,054048
+        #inc 0,043380
 
--Uranus
-#col 13758450
+    -Uranus
+        #col 13758450
 
-#sma 56,895012
-#lpe 3,010001
-#lan 1,292033
-#mna 4,460395
-#ecc 0,047246
-#inc 0,000235
+        #sma 76,895012
+        #lpe 3,010001
+        #lan 1,292033
+        #mna 4,460395
+        #ecc 0,047246
+        #inc 0,000235
 
--Neptune
-#col 4944117
+    -Neptune
+        #col 4944117
 
-#sma 66,877801
-#lpe 0,813257
-#lan 2,299971
-#mna 5,509489
-#ecc 0,008692
-#inc 0,030895
+        #sma 86,877801
+        #lpe 0,813257
+        #lan 2,299971
+        #mna 5,509489
+        #ecc 0,008692
+        #inc 0,030895
 
--Pluto
-#col 13153450
+    -Pluto
+        #col 13153450
 
-#sma 70,603342
-#lpe 3,899238
-#lan 1,925793
-#mna 0,943171
-#ecc 0,247652
-#inc 0,299848
+        #sma 90,603342
+        #lpe 3,899238
+        #lan 1,925793
+        #mna 0,943171
+        #ecc 0,247652
+        #inc 0,299848
+
+.jov
+    -Metis
+        #col 10526880
+
+        #sma 6,000000
+        #lpe 1,570796
+        #lan 2,094395
+        #mna 3,141592
+        #ecc 0,000200
+        #inc 0,001047
+
+    -Io
+        #col 16773914
+
+        #sma 10,000000
+        #lpe 0,713120
+        #lan 0,000000
+        #mna 1,141450
+        #ecc 0,004100
+        #inc 0,000628
+
+    -Europa
+        #col 14800310
+
+        #sma 14,000000
+        #lpe 1,591240
+        #lan 0,000000
+        #mna 1,846555
+        #ecc 0,009000
+        #inc 0,008203
+
+    -Ganymede
+        #col 11510165
+
+        #sma 18,000000
+        #lpe 3,354210
+        #lan 0,000000
+        #mna 1,281057
+        #ecc 0,001300
+        #inc 0,003490
+
+    -Callisto
+        #col 8417637
+
+        #sma 24,000000
+        #lpe 0,912430
+        #lan 0,000000
+        #mna 2,021060
+        #ecc 0,007400
+        #inc 0,004886
+
+    -Carme
+        #col 6579300
+
+        #sma 36,000000
+        #lpe 0,582939
+        #lan 1,986185
+        #mna 2,359682
+        #ecc 0,253300
+        #inc 2,878051
+
+    -Kore
+        #col 8421504
+
+        #sma 42,000000
+        #lpe 3,117176
+        #lan 4,731589
+        #mna 0,790632
+        #ecc 0,325000
+        #inc 2,530727
+
+    -Carpo
+        #col 5592405
+
+        #sma 28,000000
+        #lpe 0,872665
+        #lan 1,047198
+        #mna 2,181662
+        #ecc 0,416000
+        #inc 0,942478
+
+.sat
+    -Pan
+        #col 14540253
+
+        #sma 6,000000
+        #lpe 0,000000
+        #lan 0,000000
+        #mna 1,047198
+        #ecc 0,000000
+        #inc 0,000000
+
+    -Mimas
+        #col 16777215
+
+        #sma 8,000000
+        #lpe 2,757620
+        #lan 0,000000
+        #mna 3,089233
+        #ecc 0,020200
+        #inc 0,027052
+
+    -Enceladus
+        #col 16185077
+
+        #sma 10,000000
+        #lpe 5,882772
+        #lan 0,000000
+        #mna 0,261799
+        #ecc 0,004700
+        #inc 0,001570
+
+    -Tethys
+        #col 15395536
+
+        #sma 13
+        #lpe 0,733038
+        #lan 0
+        #mna 2,164208
+        #ecc 0,000100
+        #inc 0,018500
+
+    -Dione
+        #col 15132386
+
+        #sma 17
+        #lpe 4,886922
+        #lan 0
+        #mna 3,839724
+        #ecc 0,002200
+        #inc 0,000349
+
+    -Rhea
+        #col 14803425
+
+        #sma 22
+        #lpe 5,096361
+        #lan 0
+        #mna 5,166175
+        #ecc 0,001000
+        #inc 0,005934
+
+    -Titan
+        #col 13808432
+
+        #sma 30
+        #lpe 5,602507
+        #lan 4,852015
+        #mna 3,316126
+        #ecc 0,028800
+        #inc 0,005236
+
+    -Iapetus
+        #col 8553090
+
+        #sma 45
+        #lpe 6,108652
+        #lan 4,834568
+        #mna 5,934119
+        #ecc 0,028300
+        #inc 0,270526
+
+    -Phoebe
+        #col 5789760
+
+        #sma 55
+        #lpe 0,174533
+        #lan 0,767945
+        #mna 2,617994
+        #ecc 0,163000
+        #inc 3,036873
+
+.ura
+    -Miranda
+        #col 12567232
+
+        #sma 6
+        #lpe 2,740167
+        #lan 0
+        #mna 1,909000
+        #ecc 0,001300
+        #inc 0,075049
+
+    -Ariel
+        #col 15724527
+
+        #sma 9
+        #lpe 5,882772
+        #lan 0
+        #mna 1,983000
+        #ecc 0,001200
+        #inc 0,004538
+
+    -Umbriel
+        #col 9211020
+
+        #sma 12
+        #lpe 0,349066
+        #lan 0
+        #mna 3,520000
+        #ecc 0,003900
+        #inc 0,006458
+
+    -Titania
+        #col 14474460
+
+        #sma 16
+        #lpe 2,617994
+        #lan 0
+        #mna 3,103000
+        #ecc 0,001100
+        #inc 0,005934
+
+    -Oberon
+        #col 12829631
+
+        #sma 21
+        #lpe 1,483530
+        #lan 0
+        #mna 3,316000
+        #ecc 0,001400
+        #inc 0,001745
+
+.nep
+    -Proteus
+        #col 16777215
+
+        #sma 6
+        #lpe 0
+        #lan 0
+        #mna 1,480000
+        #ecc 0,000500
+        #inc 0
+
+    -Triton
+        #col 13158655
+
+        #sma 12
+        #lpe 1,980000
+        #lan 0
+        #mna 4,120000
+        #ecc 0,000016
+        #inc 2,740156
+
+    -Nereid
+        #col 9474192
+
+        #sma 25
+        #lpe 0
+        #lan 0
+        #mna 0,850000
+        #ecc 0,750000
+        #inc 0,125000
+
+.plu
+    -Charon
+        #col 12829631
+
+        #sma 10
+        #lpe 0
+        #lan 0
+        #mna 2,850000
+        #ecc 0
+        #inc 0
+
+    -Styx
+        #col 10526880
+        #sma 22
+        #lpe 0,104720
+        #lan 0
+        #mna 1,420000
+        #ecc 0,005800
+        #inc 0,014500
+
+    -Nix
+        #col 15784076
+
+        #sma 26
+        #lpe 3,141592
+        #lan 0
+        #mna 4,890000
+        #ecc 0,003000
+        #inc 0,003500
+
+    -Kerberos
+        #col 9474192
+
+        #sma 31,
+        #lpe 0,872665
+        #lan 0
+        #mna 0,550000
+        #ecc 0,003300
+        #inc 0,007000
+
+    -Hydra
+        #col 16773914
+
+        #sma 36
+        #lpe 5,864310
+        #lan 0
+        #mna 2,120000
+        #ecc 0,005500
+        #inc 0,004400
+
+.ker
+    -Moho
+        #col 12632256
+
+        #sma 10,350000
+        #lpe 1,350000
+        #lan 0,840000
+        #mna 3,470000
+        #ecc 0,205000
+        #inc 0,122000
+
+    -Eve
+        #col 13615020
+
+        #sma 20,350000
+        #lpe 2,290000
+        #lan 1,330000
+        #mna 1,320000
+        #ecc 0,006000
+        #inc 0,059000
+
+    -Kerbin
+        #col 4810239
+
+        #sma 30
+        #lpe 1,790000
+        #lan 0
+        #mna 3,170000
+        #ecc 0,016000
+        #inc 0
+
+    -Duna
+        #col 12845056
+
+        #sma 40
+        #lpe 5,860000
+        #lan 0,860000
+        #mna 0,930000
+        #ecc 0,093000
+        #inc 0,032000
+
+    -Dres
+        #col 12632256
+
+        #sma 50
+        #lpe 0,250000
+        #lan 1,750000
+        #mna 1,830000
+        #ecc 0,048000
+        #inc 0,022000
+
+    -Jool
+        #col 8573696
+
+        #sma 90
+        #lpe 1,610000
+        #lan 1,980000
+        #mna 4,910000
+        #ecc 0,054000
+        #inc 0,043000
+
+    -Eeloo
+        #col 16777215
+
+        #sma 190
+        #lpe 3,010000
+        #lan 1,290000
+        #mna 4,460000
+        #ecc 0,470000
+        #inc 0,000200
