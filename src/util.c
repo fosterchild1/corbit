@@ -1,7 +1,6 @@
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <stdbool.h>
 #include "simulation.h"
 
@@ -93,8 +92,8 @@ double StrToDouble(char* str) {
 }
 
 Color HexToRGB(int hex) {
-    int r = ((hex >> 16) & 0xFF);
-    int g = ((hex >> 8) & 0xFF);
-    int b = (hex & 0xFF);
+    int r = (hex >> 16) & 0xFF;
+    int g = (hex >> 8) & 0xFF;
+    int b = hex & 0xFF;
     return (Color){r, g, b, 0};
 }

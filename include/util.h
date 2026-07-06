@@ -4,6 +4,7 @@
 #include "simulation.h"
 
 #define max(a, b) ((a) > (b) ? (a) : (b))
+#define rad(x) ((x) * M_PI / 180.0)
 
 float CalculateEccentricAnomaly(double mna, float ecc);
 

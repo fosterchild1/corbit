@@ -8,7 +8,7 @@ indentation is not required
     -Mercury
         #col 8025969
 
-        #sma 10,353321
+        #sma 10
         #lpe 1,354432
         #lan 0,842953
         #mna 3,470119
@@ -18,7 +18,7 @@ indentation is not required
     -Venus
         #col 14797464
 
-        #sma 14,354009
+        #sma 14
         #lpe 2,296532
         #lan 1,338321
         #mna 1,328372
@@ -28,17 +28,17 @@ indentation is not required
     -Earth
         #col 33023
 
-        #sma 18,932901
+        #sma 18
         #lpe 1,798101
-        #lan 0,000000
+        #lan 0
         #mna 3,175697
         #ecc 0,016702
-        #inc 0,000000
+        #inc 0
 
     -Mars
         #col 12665870
 
-        #sma 24,328325
+        #sma 24
         #lpe 5,867087
         #lan 0,863622
         #mna 0,938402
@@ -48,7 +48,7 @@ indentation is not required
     -Jupiter
         #col 14003331
 
-        #sma 46,437941
+        #sma 46
         #lpe 0,251125
         #lan 1,754549
         #mna 1,831710
@@ -58,7 +58,7 @@ indentation is not required
     -Saturn
         #col 15654575
 
-        #sma 56,452621
+        #sma 56
         #lpe 1,618885
         #lan 1,982502
         #mna 4,916576
@@ -68,7 +68,7 @@ indentation is not required
     -Uranus
         #col 13758450
 
-        #sma 76,895012
+        #sma 76
         #lpe 3,010001
         #lan 1,292033
         #mna 4,460395
@@ -78,7 +78,7 @@ indentation is not required
     -Neptune
         #col 4944117
 
-        #sma 86,877801
+        #sma 86
         #lpe 0,813257
         #lan 2,299971
         #mna 5,509489
@@ -88,7 +88,7 @@ indentation is not required
     -Pluto
         #col 13153450
 
-        #sma 90,603342
+        #sma 90
         #lpe 3,899238
         #lan 1,925793
         #mna 0,943171
@@ -99,7 +99,7 @@ indentation is not required
     -Metis
         #col 10526880
 
-        #sma 6,000000
+        #sma 6
         #lpe 1,570796
         #lan 2,094395
         #mna 3,141592
@@ -109,9 +109,9 @@ indentation is not required
     -Io
         #col 16773914
 
-        #sma 10,000000
+        #sma 10
         #lpe 0,713120
-        #lan 0,000000
+        #lan 0
         #mna 1,141450
         #ecc 0,004100
         #inc 0,000628
@@ -119,9 +119,9 @@ indentation is not required
     -Europa
         #col 14800310
 
-        #sma 14,000000
+        #sma 14
         #lpe 1,591240
-        #lan 0,000000
+        #lan 0
         #mna 1,846555
         #ecc 0,009000
         #inc 0,008203
@@ -129,9 +129,9 @@ indentation is not required
     -Ganymede
         #col 11510165
 
-        #sma 18,000000
+        #sma 18
         #lpe 3,354210
-        #lan 0,000000
+        #lan 0
         #mna 1,281057
         #ecc 0,001300
         #inc 0,003490
@@ -139,9 +139,9 @@ indentation is not required
     -Callisto
         #col 8417637
 
-        #sma 24,000000
+        #sma 24
         #lpe 0,912430
-        #lan 0,000000
+        #lan 0
         #mna 2,021060
         #ecc 0,007400
         #inc 0,004886
@@ -149,7 +149,7 @@ indentation is not required
     -Carme
         #col 6579300
 
-        #sma 36,000000
+        #sma 36
         #lpe 0,582939
         #lan 1,986185
         #mna 2,359682
@@ -159,7 +159,7 @@ indentation is not required
     -Kore
         #col 8421504
 
-        #sma 42,000000
+        #sma 42
         #lpe 3,117176
         #lan 4,731589
         #mna 0,790632
@@ -169,7 +169,7 @@ indentation is not required
     -Carpo
         #col 5592405
 
-        #sma 28,000000
+        #sma 28
         #lpe 0,872665
         #lan 1,047198
         #mna 2,181662
@@ -180,19 +180,19 @@ indentation is not required
     -Pan
         #col 14540253
 
-        #sma 6,000000
-        #lpe 0,000000
-        #lan 0,000000
+        #sma 6
+        #lpe 0
+        #lan 0
         #mna 1,047198
-        #ecc 0,000000
-        #inc 0,000000
+        #ecc 0
+        #inc 0
 
     -Mimas
         #col 16777215
 
-        #sma 8,000000
+        #sma 8
         #lpe 2,757620
-        #lan 0,000000
+        #lan 0
         #mna 3,089233
         #ecc 0,020200
         #inc 0,027052
@@ -200,9 +200,9 @@ indentation is not required
     -Enceladus
         #col 16185077
 
-        #sma 10,000000
+        #sma 10
         #lpe 5,882772
-        #lan 0,000000
+        #lan 0
         #mna 0,261799
         #ecc 0,004700
         #inc 0,001570

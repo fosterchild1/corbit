@@ -17,15 +17,15 @@ void Initncurses(void) {
 
 int main(int charc, char* argv[]) {
     CLIConfig config = ParseCLI(charc, argv);
-
-    int width, height;
     Initncurses();
+    InitBinds();
+
+    // init scene
+    int width, height;
     getmaxyx(stdscr, height, width);
-    
+
     Scene mainScene = {NULL, 0, 0, {width/2, height/2}, {90, 1}, 0};
     InitScene(&mainScene, config.system);
-
-    InitBinds();
 
     while (true) {
         RenderScene(mainScene);

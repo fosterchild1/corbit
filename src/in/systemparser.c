@@ -9,7 +9,7 @@
 .sol
 -Mercury
 #mna 0.91
-#lna 4.15
+#lan 4.15
 ..etc
 */
 
@@ -101,6 +101,7 @@ Planet MakePlanetFromConfig(char* name, char* config, int startIdx, int endIdx) 
 
     int currIdx = startIdx;
     while (true) {
+        // all variable names start with #, followed by their value
         int keyIdx = FindNextChar(config, '#', currIdx);
         if (keyIdx == -1 || keyIdx > endIdx) break;
         currIdx = keyIdx + 1;
@@ -130,9 +131,8 @@ void InitScene(Scene* scene, char* system) {
     (void)scene;
     char* contents = ReadSystemsFile();
     char* systemConfig = GetSystemConfig(contents, system);
-    printf("cut: %s\n", systemConfig);
     if (strcmp(systemConfig, "") == 0) return;
-
+    
     int currIdx = 0;
     while (true) {
         int planetStartIdx = FindNextChar(systemConfig, '-', currIdx);
@@ -142,14 +142,12 @@ void InitScene(Scene* scene, char* system) {
         // get name
         char* planetName = ReadName(systemConfig, currIdx);
         currIdx += strlen(planetName);
-        printf("identified planet name: %s\n", planetName);
     
         // get end idx of the planet config, then make it and add to scene
         int nextPlanetIdx = FindNextChar(systemConfig, '-', currIdx);
         nextPlanetIdx = (nextPlanetIdx == -1) ? (int)strlen(systemConfig) - 1 : nextPlanetIdx;
 
         Planet planet = MakePlanetFromConfig(planetName, systemConfig, currIdx, nextPlanetIdx);
-        printf("planet name: %s", planet.name);
         AddToScene(scene, &planet);
     }
 }

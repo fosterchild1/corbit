@@ -10,7 +10,7 @@ static int8_t* depthBuf;
 void RenderOrbit(Planet planet, Camera camera, Point center) {
     OrbitParams orbit = planet.orbitparams;
     float ecc = orbit.eccentricity;
-    float viewRad = camera.viewAngle * M_PI/180.0;
+    float viewRad = rad(camera.viewAngle);
 
     // build trig array
     double lan = orbit.lan;
@@ -21,8 +21,7 @@ void RenderOrbit(Planet planet, Camera camera, Point center) {
     int a = orbit.smaxis * camera.zoom;
     int b = (int)(sqrt(1 - ecc*ecc) * a); // semi minor axis
 
-    int max = (a > b) ? a : b;
-    float step = 0.5/max;
+    float step = 1.0/max(a, b);
 
     int xc = center.x;
     int yc = center.y;
@@ -106,7 +105,7 @@ void RenderScene(Scene scene) {
         RenderOrbit(scene.planets[i], scene.camera, center);
     }
 
-    // render planets and their names
+    // render planets and their names above the orbits
     for (int i = 0; i < scene.planetCount; i++) {
         RenderPlanet(scene.planets[i], scene.camera, center);
     }

@@ -1,6 +1,7 @@
 #include <math.h>
 #include <ncurses.h>
 #include <stdlib.h>
+#include <string.h>
 #include "simulation.h"
 
 #define colorSub(c) (((c) > 30) ? ((c) - 40) : 0)
@@ -12,7 +13,8 @@ void InitPlanetColors(short id, Color color) {
     short planetR = (color.R * 1000) / 255;
     short planetG = (color.G * 1000) / 255;
     short planetB = (color.B * 1000) / 255;
-    
+
+    // darken the orbit colors
     short orbitR = (colorSub(color.R) * 1000) / 255;
     short orbitG = (colorSub(color.G) * 1000) / 255;
     short orbitB = (colorSub(color.B) * 1000) / 255; 
@@ -36,7 +38,7 @@ Planet CreatePlanet(OrbitParams* orbit, Color* color, char* name) {
         color->colorID = colorID;
         colorID += 2;
     }
-    printf("ok\n\n");
+
     return (Planet){*orbit, *color, name};
 }
 
