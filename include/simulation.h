@@ -6,6 +6,9 @@
 #define M_PI 3.14159265358979323846
 #define M_TAU 2*M_PI
 
+#define TERM_FONT_RATIO 1.5 // fonts are taller than wide
+
+
 typedef struct {
     int x;
     int y;

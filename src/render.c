@@ -35,7 +35,7 @@ void RenderOrbit(Planet planet, Camera camera, Point center) {
         
         FPoint3 point = GetPointOnElipse(xLocal, yLocal, trigArr);
 
-        float camY = point.y * sinf(viewRad) - point.z * cosf(viewRad);
+        float camY = (point.y * sinf(viewRad) - point.z * cosf(viewRad)) / TERM_FONT_RATIO; // account for fonts being taller than wide
 
         int targetY = yc-camY; int targetX = xc+point.x;
         // ensure targetY and targetX are on screen
@@ -77,7 +77,7 @@ void RenderPlanet(Planet planet, Camera camera, Point center) {
     float planetYLocal = b * sinf(E);
     
     FPoint3 planetPos = GetPointOnElipse(planetXLocal, planetYLocal, trigArr);
-    float camY = planetPos.y * sin(viewRad) - planetPos.z * cos(viewRad);
+    float camY = (planetPos.y * sin(viewRad) - planetPos.z * cos(viewRad)) / TERM_FONT_RATIO;
 
     // render planet
     mvaddch(yc-camY, xc+planetPos.x, 'O' | COLOR_PAIR(planet.color.colorID)); 
