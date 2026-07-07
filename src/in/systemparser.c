@@ -72,6 +72,18 @@ char* ReadName(char* str, int startIdx) {
     return "";
 }
 
+void HandleOrbitProperty(OrbitParams* orbit, char* keyName, double value) {
+    // very ugly...
+    if (strcmp(keyName, "sma") == 0) { orbit->smaxis = value; }
+    if (strcmp(keyName, "lpe") == 0) { orbit->lpe = value; }
+    if (strcmp(keyName, "lan") == 0) { orbit->lan = value; }
+    if (strcmp(keyName, "mna") == 0) { orbit->mna = value; }
+    if (strcmp(keyName, "ecc") == 0) { orbit->eccentricity = value; }
+    if (strcmp(keyName, "inc") == 0) { orbit->inclination = value; }
+
+    if (strcmp(keyName, "") != 0) free(keyName); // free only if malloc'd
+}
+
 char* GetSystemConfig(char* contents, char* system) {
     int currIdx = 0;
 
@@ -84,7 +96,8 @@ char* GetSystemConfig(char* contents, char* system) {
         char* systemName = ReadName(contents, currIdx);
         currIdx += strlen(systemName);
 
-        if (strcmp(systemName, system) != 0) continue;
+        int isSameSystem = strcmp(systemName, system) == 0; free(systemName);
+        if (!isSameSystem) continue;
         break;
     }
     
@@ -111,17 +124,12 @@ Planet MakePlanetFromConfig(char* name, char* config, int startIdx, int endIdx) 
         currIdx += strlen(keyName) + 1;
 
         char* strValue = ReadName(config, currIdx);
-        double value = StrToDouble(strValue);
+        double value = StrToDouble(strValue); 
+        if (strcmp(strValue, "") != 0) free(strValue); // free strValue if succesfully malloc'd
 
         // super ugly
-        if (strcmp(keyName, "col") == 0) {color = HexToRGB(value); continue; }
-
-        if (strcmp(keyName, "sma") == 0) { orbit.smaxis = value; continue; }
-        if (strcmp(keyName, "lpe") == 0) { orbit.lpe = value; continue; }
-        if (strcmp(keyName, "lan") == 0) { orbit.lan = value; continue; }
-        if (strcmp(keyName, "mna") == 0) { orbit.mna = value; continue; }
-        if (strcmp(keyName, "ecc") == 0) { orbit.eccentricity = value; continue; }
-        if (strcmp(keyName, "inc") == 0) { orbit.inclination = value; continue; }
+        if (strcmp(keyName, "col") == 0) {color = HexToRGB(value); free(keyName); continue; }
+        HandleOrbitProperty(&orbit, keyName, value);
     }
 
     return CreatePlanet(&orbit, &color, name);
@@ -150,4 +158,6 @@ void InitScene(Scene* scene, char* system) {
         Planet planet = MakePlanetFromConfig(planetName, systemConfig, currIdx, nextPlanetIdx);
         AddToScene(scene, &planet);
     }
+
+    free(contents); free(systemConfig);
 }

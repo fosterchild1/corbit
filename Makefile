@@ -3,7 +3,7 @@ SRCDIR := src
 BUILDDIR := build
 INSTALLDIR := /usr/local/bin
 BINDIR := bin
-CFLAGS := -Wall -Wextra -Wshadow -Werror -Wpedantic -std=c11 -Iinclude -O2
+CFLAGS := -Wall -Wextra -Wshadow -Werror -Wpedantic -std=c11 -Iinclude -O2 -g
 TARGET := $(BINDIR)/corbit
 SRCEXT := c
 
@@ -26,7 +26,6 @@ $(BUILDDIR):
 $(BINDIR):
 	@mkdir -p $(BINDIR)
 
-.PHONY: clean
 clean:
 	rm -rf $(BUILDDIR) $(BINDIR)
 
@@ -37,3 +36,4 @@ install: all
 	mkdir -p $(HOME)/.config/corbit
 	cp systems $(HOME)/.config/corbit
 
+.PHONY: all clean

@@ -50,7 +50,7 @@ void RenderOrbit(Planet planet, Camera camera, Point center) {
         
         depthBuf[depthIdx] = depth;
         lastY = targetY; lastX = targetX;
-        mvaddch(targetY, targetX, '.' | COLOR_PAIR(planet.color.colorID+1));
+        mvaddch(targetY, targetX, ':' | COLOR_PAIR(planet.color.colorID+1));
     }
 }
 
