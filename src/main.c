@@ -3,6 +3,7 @@
 #include "simulation.h"
 #include "render.h"
 #include "cli.h"
+#include "util.h"
 #include "systemparser.h"
 
 void Initncurses(void) {
@@ -14,6 +15,7 @@ void Initncurses(void) {
     if (has_colors()) {
         start_color();
         use_default_colors();
+        InitDefaultColorPairs();
     }
 
     nodelay(stdscr, TRUE);

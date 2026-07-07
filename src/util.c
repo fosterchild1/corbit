@@ -1,4 +1,5 @@
 #include <math.h>
+#include <ncurses.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -96,4 +97,10 @@ Color HexToRGB(int hex) {
     int g = (hex >> 8) & 0xFF;
     int b = hex & 0xFF;
     return (Color){r, g, b, 0};
+}
+
+void InitDefaultColorPairs(void) {
+    for (short i = 0; i < 16; i++) {
+        init_pair(i, i, -1);
+    }
 }

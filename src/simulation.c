@@ -4,8 +4,6 @@
 #include <string.h>
 #include "simulation.h"
 
-#define colorSub(c) (((c) > 30) ? ((c) - 40) : 0)
-
 static short colorID=16;
 
 void InitPlanetColors(short id, Color color) {
@@ -15,9 +13,9 @@ void InitPlanetColors(short id, Color color) {
     short planetB = (color.B * 1000) / 255;
 
     // darken the orbit colors
-    short orbitR = (colorSub(color.R) * 1000) / 255;
-    short orbitG = (colorSub(color.G) * 1000) / 255;
-    short orbitB = (colorSub(color.B) * 1000) / 255; 
+    short orbitR = (DimColor(color.R) * 1000) / 255;
+    short orbitG = (DimColor(color.G) * 1000) / 255;
+    short orbitB = (DimColor(color.B) * 1000) / 255; 
     
     init_color(id, planetR, planetG, planetB);
     init_color(id+1, orbitR, orbitG, orbitB);

@@ -18,4 +18,6 @@ double StrToDouble(char* str);
 
 Color HexToRGB(int hex);
 
+void InitDefaultColorPairs(void);
+
 #endif
