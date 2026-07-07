@@ -31,7 +31,7 @@ clean:
 	rm -rf $(BUILDDIR) $(BINDIR)
 
 .PHONY: install
-install:
+install: all
 	install -m 755 $(TARGET) $(INSTALLDIR)/corbit
 
 	mkdir -p $(HOME)/.config/corbit
