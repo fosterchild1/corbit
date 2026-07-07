@@ -24,8 +24,8 @@ FPoint3 GetPointOnElipse(float xLocal, float yLocal, float trigArr[6]) {
     float sinOmega = trigArr[0]; float cosOmega = trigArr[1];
     float sinLan = trigArr[2]; float cosLan = trigArr[3];
     float sinInc = trigArr[4]; float cosInc = trigArr[5];
-
-    // thanks superchil for this monstrosity
+    
+    // apply transposed rotation matrix. i wont act like i understand this
     float x = xLocal * (cosOmega * cosLan - sinOmega * sinLan * cosInc) - yLocal * (sinOmega * cosLan + cosOmega * sinLan * cosInc);
     float y = xLocal * (cosOmega * sinLan + sinOmega * cosLan * cosInc) - yLocal * (sinOmega * sinLan - cosOmega * cosLan * cosInc);
     float z = xLocal * (sinOmega * sinInc)                              + yLocal * (cosOmega * sinInc);

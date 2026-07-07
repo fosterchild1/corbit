@@ -1,6 +1,7 @@
 CC := gcc
 SRCDIR := src
 BUILDDIR := build
+INSTALLDIR := /usr/local/bin
 BINDIR := bin
 CFLAGS := -Wall -Wextra -Wshadow -Werror -Wpedantic -std=c11 -Iinclude -O2
 TARGET := $(BINDIR)/corbit
@@ -25,11 +26,14 @@ $(BUILDDIR):
 $(BINDIR):
 	@mkdir -p $(BINDIR)
 
+.PHONY: clean
 clean:
 	rm -rf $(BUILDDIR) $(BINDIR)
 
+.PHONY: install
 install:
+	install -m 755 $(TARGET) $(INSTALLDIR)/corbit
+
 	mkdir -p $(HOME)/.config/corbit
 	cp systems $(HOME)/.config/corbit
 
-.PHONY: all clean
