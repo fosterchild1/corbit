@@ -32,7 +32,7 @@ clean:
 
 .PHONY: install
 install: all
-	install -m 755 $(TARGET) $(INSTALLDIR)/corbit
+	sudo install -m 755 $(TARGET) $(INSTALLDIR)/corbit
 
 	mkdir -p $(HOME)/.config/corbit
 	cp systems $(HOME)/.config/corbit
