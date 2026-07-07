@@ -35,9 +35,9 @@ void RenderOrbit(Planet planet, Camera camera, Point center) {
         
         FPoint3 point = GetPointOnElipse(xLocal, yLocal, trigArr);
 
-        float camY = (point.y * sinf(viewRad) - point.z * cosf(viewRad)) / TERM_FONT_RATIO; // account for fonts being taller than wide
+        float camY = (point.y * sinf(viewRad) - point.z * cosf(viewRad)) / TERM_FONT_RATIO;
 
-        int targetY = yc-camY; int targetX = xc+point.x;
+        int targetY = (yc-camY); int targetX = xc+point.x;
         // ensure targetY and targetX are on screen
         if ((targetY == lastY && targetX == lastX) || 
             (targetY >= yc*2 || targetX >= xc*2)   ||

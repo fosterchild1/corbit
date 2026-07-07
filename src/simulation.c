@@ -22,8 +22,8 @@ void InitPlanetColors(short id, Color color) {
     init_color(id, planetR, planetG, planetB);
     init_color(id+1, orbitR, orbitG, orbitB);
 
-    init_pair(id, id, COLOR_BLACK);
-    init_pair(id+1, id+1, COLOR_BLACK);
+    init_pair(id, id, -1); // -1 = bg color
+    init_pair(id+1, id+1, -1);
 }
 
 Planet CreatePlanet(OrbitParams* orbit, Color* color, char* name) {

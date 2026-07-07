@@ -10,7 +10,12 @@ void Initncurses(void) {
     noecho();
     cbreak(); 
     curs_set(0);
-    start_color();
+
+    if (has_colors()) {
+        start_color();
+        use_default_colors();
+    }
+
     nodelay(stdscr, TRUE);
     keypad(stdscr, TRUE);
 }

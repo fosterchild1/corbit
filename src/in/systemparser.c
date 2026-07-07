@@ -37,9 +37,10 @@ char* ReadSystemsFile(void) {
     // get file directory
     char* homeDir = getenv("HOME");
     int dirLen = strlen(homeDir) + strlen(systemsDir);
-    char fileDir[dirLen];
+    char fileDir[dirLen + 1];
     strcpy(fileDir, homeDir);
     strncat(fileDir, systemsDir, dirLen);
+    fileDir[dirLen] = '\0';
     
     return ReadFile(fileDir);
 }
