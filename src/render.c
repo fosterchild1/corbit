@@ -1,6 +1,5 @@
 #include <ncurses.h>
 #include <math.h>
-#include <stdlib.h>
 #include <string.h>
 #include "simulation.h"
 #include "util.h"
@@ -93,10 +92,7 @@ void RenderScene(Scene scene) {
 
     // handle depth buffer
     int bufSize = center.x * center.y * 4;
-    if (depthBuf == NULL) {
-        depthBuf = malloc(bufSize * sizeof(int8_t));
-        if (depthBuf == NULL) exit(0);
-    }
+    if (depthBuf == NULL) depthBuf = Safemalloc(bufSize * sizeof(int8_t));
     memset(depthBuf, INT8_MAX, bufSize);
 
     // render planet orbits

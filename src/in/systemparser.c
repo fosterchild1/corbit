@@ -24,9 +24,7 @@ char* ReadFile(char* dir) {
     long fileSize = ftell(file);
     fseek(file, 0, SEEK_SET);
 
-    char *string = malloc(fileSize + 1);
-    if (string == NULL) exit(EXIT_FAILURE);
-
+    char *string = Safemalloc(fileSize + 1);
     fread(string, fileSize, 1, file);
     fclose(file);
     

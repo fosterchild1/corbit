@@ -50,7 +50,7 @@ void AddToScene(Scene* scene, Planet* planet) {
         int newSize = currSize * 2;
 
         Planet* temp = realloc(scene->planets, sizeof(Planet) * newSize);
-        if (temp == NULL) exit(0);
+        if (temp == NULL) exit(EXIT_FAILURE);
         
         scene->planetCapacity = newSize;
         scene->planets = temp;

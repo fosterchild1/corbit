@@ -7,7 +7,7 @@
 #define M_TAU 2*M_PI
 
 #define TERM_FONT_RATIO 1.5 // fonts are taller than wide
-                            //
+
 #define DimColor(c) (((c) > 35) ? ((c) - 35) : 0)
 
 typedef struct {

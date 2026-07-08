@@ -34,11 +34,22 @@ FPoint3 GetPointOnElipse(float xLocal, float yLocal, float trigArr[6]) {
     return (FPoint3){x, y, z};
 }
 
+void* Safemalloc(size_t size) {
+    void* p = malloc(size);
+    if (p == NULL) {
+        endwin();
+        exit(EXIT_FAILURE);
+    }
+
+    return p;
+}
+
+
 char* Strsub(char* str, int startIdx, int endIdx) {
     if (endIdx <= startIdx) return "";
 
     int len = endIdx - startIdx;
-    char* result = malloc((len + 1) * sizeof(char));
+    char* result = Safemalloc((len + 1) * sizeof(char));
     strncpy(result, str + startIdx, len);
     result[len] = '\0';
 
