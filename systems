@@ -401,7 +401,7 @@ indentation is not required
 
 .ker
     -Moho
-        #col 12632256
+        #col 9928559
 
         #sma 10,350000
         #lpe 1,350000
@@ -411,7 +411,7 @@ indentation is not required
         #inc 0,122000
 
     -Eve
-        #col 13615020
+        #col 11494617
 
         #sma 20,350000
         #lpe 2,290000

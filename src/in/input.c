@@ -1,14 +1,17 @@
 #include <ncurses.h>
 #include <stdlib.h>
+#include <string.h>
 #include "input.h"
 #include "simulation.h"
 #include "util.h"
 
 const float ROT_AMT = M_TAU/200;
+const char* FULL_TEXT = "1/3 zoom arrow keys rotate q quit h hide";
 
 static InputBind bindFunctions[512];
-
 static bool ShouldRenderBinds = true;
+static int xPos = 0;
+
 
 void RotateUp(Scene* scene) {
     (void)scene;
@@ -61,7 +64,8 @@ void InitBinds(void) {
     bindFunctions['q'] = ExitProgram;
     bindFunctions['Q'] = ExitProgram;
 
-    bindFunctions[KEY_F(1)] = ToggleBinds;
+    bindFunctions['h'] = ToggleBinds;
+    bindFunctions['H'] = ToggleBinds;
 }
 
 void HandleInput(Scene* scene, int ip) {
@@ -72,10 +76,12 @@ void HandleInput(Scene* scene, int ip) {
     }
 }
 
-void ReverseStr(int y, int x, char* str) {
-    attron(A_REVERSE);
-    mvaddstr(y, x, str);
-    attroff(A_REVERSE);
+void PutStr(int bottom, char* str, int color) {
+    attron(COLOR_PAIR(color));
+    mvaddstr(bottom, xPos, str);
+    attroff(COLOR_PAIR(color));
+
+    xPos += strlen(str);
 }
 
 void RenderBinds(void) {
@@ -84,12 +90,14 @@ void RenderBinds(void) {
     int height, width;
     getmaxyx(stdscr, height, width);
     (void)width;
-    int bottom = height-1;
-    
-    // ugly shit...
-    ReverseStr(bottom, 0, "1"); mvaddstr(bottom, 1, "zoom in ");
-    ReverseStr(bottom, 9, "3"); mvaddstr(bottom, 10, "zoom out ");
-    ReverseStr(bottom, 19, "arrow keys"); mvaddstr(bottom, 29, "rotate scene ");
-    ReverseStr(bottom, 42, "Q"); mvaddstr(bottom, 43, "quit ");
-    ReverseStr(bottom, 48, "F1"); mvaddstr(bottom, 50, "hide binds");
+    int bottom = height-2;
+    xPos = (width - strlen(FULL_TEXT))/2;
+
+    // ugly shit and so hardcoded...
+    attron(A_BOLD);
+    PutStr(bottom, "1/3 ", COLOR_BLUE); PutStr(bottom, "zoom ", COLOR_WHITE);
+    PutStr(bottom, "arrow keys ", COLOR_BLUE); PutStr(bottom, "rotate ", COLOR_WHITE);
+    PutStr(bottom, "q ", COLOR_BLUE); PutStr(bottom, "quit ", COLOR_WHITE);
+    PutStr(bottom, "h ", COLOR_BLUE); PutStr(bottom, "hide ", COLOR_WHITE);
+    attroff(A_BOLD);
 }

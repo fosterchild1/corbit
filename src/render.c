@@ -37,7 +37,7 @@ void RenderOrbit(Planet planet, Camera camera, Point center) {
 
         float camY = (point.y * sinf(viewRad) - point.z * cosf(viewRad)) / TERM_FONT_RATIO;
 
-        int targetY = (yc-camY); int targetX = xc+point.x;
+        int targetY = yc-camY; int targetX = xc+point.x;
         // ensure targetY and targetX are on screen
         if ((targetY == lastY && targetX == lastX) || 
             (targetY >= yc*2 || targetX >= xc*2)   ||
@@ -78,10 +78,9 @@ void RenderPlanet(Planet planet, Camera camera, Point center) {
     
     FPoint3 planetPos = GetPointOnElipse(planetXLocal, planetYLocal, trigArr);
     float camY = (planetPos.y * sin(viewRad) - planetPos.z * cos(viewRad)) / TERM_FONT_RATIO;
-
     // render planet
     mvaddch(yc-camY, xc+planetPos.x, 'O' | COLOR_PAIR(planet.color.colorID)); 
-
+   
     // render name
     char* name = planet.name;
     attron(COLOR_PAIR(planet.color.colorID));
