@@ -29,7 +29,8 @@ char* ReadFile(char* dir) {
 
     fread(string, fileSize, 1, file);
     fclose(file);
-
+    
+    string[fileSize] = '\0';
     return string;
 }
 
@@ -45,8 +46,8 @@ char* ReadSystemsFile(void) {
     return ReadFile(fileDir);
 }
 
-int FindNextChar(char* str, char ch, int startIdx) {
-    if (startIdx + 1 > (int)strlen(str)) return -1;
+int FindNextChar(char* str, char ch, int startIdx, int len) {
+    if (startIdx + 1 > len) return -1;
     char* p = str + startIdx;
 
     while (*p != '\0') {
@@ -57,8 +58,8 @@ int FindNextChar(char* str, char ch, int startIdx) {
     return -1;
 }
 
-char* ReadName(char* str, int startIdx) {
-    if (startIdx + 1 > (int)strlen(str)) return "";
+char* ReadName(char* str, int startIdx, int len) {
+    if (startIdx + 1 > len) return "";
     char* p = str + startIdx;
     
     // loop till next space/newline
@@ -87,14 +88,15 @@ void HandleOrbitProperty(OrbitParams* orbit, char* keyName, double value) {
 
 char* GetSystemConfig(char* contents, char* system) {
     int currIdx = 0;
+    int contentsLen = strlen(contents);
 
     // find system, denoted by .systemname
     while (true) {
-        int nameStartIdx = FindNextChar(contents, '.', currIdx);
+        int nameStartIdx = FindNextChar(contents, '.', currIdx, contentsLen);
         if (nameStartIdx == -1) return "";
         currIdx  = nameStartIdx + 1;
 
-        char* systemName = ReadName(contents, currIdx);
+        char* systemName = ReadName(contents, currIdx, contentsLen);
         currIdx += strlen(systemName);
 
         int isSameSystem = strcmp(systemName, system) == 0; free(systemName);
@@ -103,8 +105,8 @@ char* GetSystemConfig(char* contents, char* system) {
     }
     
     // find where the system config ends, either from the next system or by end of file
-    int nextSystemIdx = FindNextChar(contents, '.', currIdx);
-    nextSystemIdx = (nextSystemIdx == -1) ? (int)strlen(contents) - 1 : nextSystemIdx;
+    int nextSystemIdx = FindNextChar(contents, '.', currIdx, contentsLen);
+    nextSystemIdx = (nextSystemIdx == -1) ? contentsLen - 1 : nextSystemIdx;
 
     return Strsub(contents, currIdx, nextSystemIdx);
 }
@@ -116,15 +118,15 @@ Planet MakePlanetFromConfig(char* name, char* config, int startIdx, int endIdx) 
     int currIdx = startIdx;
     while (true) {
         // all variable names start with #, followed by their value
-        int keyIdx = FindNextChar(config, '#', currIdx);
+        int keyIdx = FindNextChar(config, '#', currIdx, endIdx);
         if (keyIdx == -1 || keyIdx > endIdx) break;
         currIdx = keyIdx + 1;
         
         // read name and value
-        char* keyName = ReadName(config, currIdx);
+        char* keyName = ReadName(config, currIdx, endIdx);
         currIdx += strlen(keyName) + 1;
 
-        char* strValue = ReadName(config, currIdx);
+        char* strValue = ReadName(config, currIdx, endIdx);
         double value = StrToDouble(strValue); 
         if (strcmp(strValue, "") != 0) free(strValue); // free strValue if succesfully malloc'd
 
@@ -143,18 +145,20 @@ void InitScene(Scene* scene, char* system) {
     if (strcmp(systemConfig, "") == 0) return;
     
     int currIdx = 0;
+    int configLen = strlen(systemConfig);
+
     while (true) {
-        int planetStartIdx = FindNextChar(systemConfig, '-', currIdx);
+        int planetStartIdx = FindNextChar(systemConfig, '-', currIdx, configLen);
         if (planetStartIdx == -1) break;
         currIdx = planetStartIdx + 1;
 
         // get name
-        char* planetName = ReadName(systemConfig, currIdx);
+        char* planetName = ReadName(systemConfig, currIdx, configLen);
         currIdx += strlen(planetName);
     
         // get end idx of the planet config, then make it and add to scene
-        int nextPlanetIdx = FindNextChar(systemConfig, '-', currIdx);
-        nextPlanetIdx = (nextPlanetIdx == -1) ? (int)strlen(systemConfig) - 1 : nextPlanetIdx;
+        int nextPlanetIdx = FindNextChar(systemConfig, '-', currIdx, configLen);
+        nextPlanetIdx = (nextPlanetIdx == -1) ? configLen - 1 : nextPlanetIdx;
 
         Planet planet = MakePlanetFromConfig(planetName, systemConfig, currIdx, nextPlanetIdx);
         AddToScene(scene, &planet);

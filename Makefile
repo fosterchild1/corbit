@@ -3,7 +3,7 @@ SRCDIR := src
 BUILDDIR := build
 INSTALLDIR := /usr/local/bin
 BINDIR := bin
-CFLAGS := -Wall -Wextra -Wshadow -Werror -Wpedantic -fsanitize=address,undefined -std=c11 -Iinclude -O2 -g
+CFLAGS := -Wall -Wextra -Wshadow -Werror -Wpedantic -fsanitize=address,undefined -std=c11 -Iinclude -Og -g
 TARGET := $(BINDIR)/corbit
 SRCEXT := c
 
