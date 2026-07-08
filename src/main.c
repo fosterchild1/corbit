@@ -26,7 +26,7 @@ int main(int charc, char* argv[]) {
     CLIConfig config = ParseCLI(charc, argv);
     Initncurses();
     InitBinds();
-
+    
     // init scene
     int width, height;
     getmaxyx(stdscr, height, width);

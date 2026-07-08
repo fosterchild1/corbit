@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "input.h"
+#include "render.h" 
 #include "simulation.h"
 #include "util.h"
 
@@ -45,7 +46,12 @@ void ZoomOut(Scene* scene) {
     scene->camera.zoom = max(scene->camera.zoom * 0.95, 0.05);
 }
 
-void ExitProgram(Scene* scene) { (void)scene; endwin(); exit(0); }
+void ExitProgram(Scene* scene) { 
+    (void)scene; 
+    FreeDepthBuf(); 
+    endwin(); 
+    exit(EXIT_SUCCESS); 
+}
 
 void ToggleBinds(Scene* scene) {
     (void)scene;

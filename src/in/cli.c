@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "util.h"
-#include "render.h"
 #include "cli.h"
 
 const char* HELP_TEXT = "Usage: corbit [OPTIONS]...\n" 
@@ -25,7 +24,6 @@ int ContainsEqual(char* str) {
 
 void DisplayHelpText(void) {
     printf("%s", HELP_TEXT);
-    FreeDepthBuf();
     exit(EXIT_SUCCESS);
 }
 
