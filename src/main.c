@@ -44,7 +44,6 @@ int main(int charc, char* argv[]) {
         napms(16);
         erase();
     }
-
-	endwin();
+    
 	return 0;
 }

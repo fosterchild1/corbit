@@ -5,4 +5,6 @@
 
 void RenderScene(Scene scene);
 
+void FreeDepthBuf(void);
+
 #endif

@@ -107,3 +107,8 @@ void RenderScene(Scene scene) {
 
     mvaddch(center.y, center.x, '*');
 }
+
+void FreeDepthBuf(void) {
+    if (depthBuf == NULL) return;
+    free(depthBuf);
+}
