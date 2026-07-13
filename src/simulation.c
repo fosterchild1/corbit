@@ -60,6 +60,17 @@ void AddToScene(Scene* scene, Planet* planet) {
     scene->planetCount += 1;
 }
 
+void CleanScene(Scene* scene) {
+    for (int i = 0; i < scene->planetCount; i++) {
+        free(scene->planets[i].name);
+    }
+    free(scene->planets);
+    scene->planets = NULL;
+
+    scene->planetCount = 0;
+    scene->planetCapacity = 0;
+}
+
 void StepSimulation(Scene* scene, int seconds) {
     float time = seconds/100.0;
 

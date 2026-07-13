@@ -29,11 +29,11 @@ $(BINDIR):
 clean:
 	rm -rf $(BUILDDIR) $(BINDIR)
 
-.PHONY: install
-install: all
+install: CFLAGS := -Wall -Wextra -Wshadow -Werror -Wpedantic -std=c11 -Iinclude -O2 
+install: clean all
 	sudo install -m 755 $(TARGET) $(INSTALLDIR)/corbit
 
 	mkdir -p $(HOME)/.config/corbit
 	cp systems $(HOME)/.config/corbit
 
-.PHONY: all clean
+.PHONY: all clean install

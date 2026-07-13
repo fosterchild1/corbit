@@ -48,7 +48,9 @@ void ZoomOut(Scene* scene) {
 
 void ExitProgram(Scene* scene) { 
     (void)scene; 
-    FreeDepthBuf(); 
+    FreeDepthBuf();
+    CleanScene(scene);
+
     endwin(); 
     exit(EXIT_SUCCESS); 
 }
