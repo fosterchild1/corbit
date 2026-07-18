@@ -50,7 +50,8 @@ void ExitProgram(Scene* scene) {
     (void)scene; 
     FreeDepthBuf();
     CleanScene(scene);
-
+    
+    reset_color_pairs();
     endwin(); 
     exit(EXIT_SUCCESS); 
 }
