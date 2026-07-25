@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "input.h"
-#include "render.h" 
+#include "render.h"
 #include "simulation.h"
 #include "util.h"
 

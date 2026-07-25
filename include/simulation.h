@@ -40,6 +40,7 @@ typedef struct {
 Planet CreatePlanet(OrbitParams* params, Color* color, char* name);
 
 void AddToScene(Scene* scene, Planet* planet);
+void RemoveFromScene(Scene* scene, Planet* planet);
 void CleanScene(Scene* scene);
 
 void StepSimulation(Scene* scene, int seconds);

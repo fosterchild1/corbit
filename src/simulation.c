@@ -37,7 +37,7 @@ Planet CreatePlanet(OrbitParams* orbit, Color* color, char* name) {
         colorID += 2;
     }
 
-    return (Planet){*orbit, *color, name};
+    return (Planet){*orbit, *color, name, -1};
 }
 
 void AddToScene(Scene* scene, Planet* planet) {
@@ -55,9 +55,41 @@ void AddToScene(Scene* scene, Planet* planet) {
         scene->planetCapacity = newSize;
         scene->planets = temp;
     }
-    
-    scene->planets[neededSize - 1] = *planet;
+
+    planet->planetID = scene->planetCount;
+
     scene->planetCount += 1;
+    scene->planets[neededSize - 1] = *planet;
+}
+
+void RemoveFromScene(Scene* scene, Planet* planet) {
+    int id = planet->planetID;
+    if (id < 0) return; // not in scene
+    free(scene->planets[id].name);
+    planet->planetID = -1;
+
+    // shift all planet indexes after the removing planet down by one
+    int newSize = --scene->planetCount;
+
+    for (int i = id; i < newSize; i++) {
+        scene->planets[i] = scene->planets[i + 1];
+        scene->planets[i].planetID = i;
+    }
+
+    if (newSize == 0) {
+        free(scene->planets);
+        scene->planets = NULL;
+        scene->planetCapacity = 0;
+        scene->planetCount = 0;
+
+        return;
+    }
+    
+    Planet* newScenePlanets = realloc(scene->planets, sizeof(Planet) * newSize);
+    if (newScenePlanets == NULL) exit(EXIT_FAILURE);
+    
+    scene->planets = newScenePlanets;
+    scene->planetCapacity = newSize;
 }
 
 void CleanScene(Scene* scene) {

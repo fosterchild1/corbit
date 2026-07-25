@@ -23,6 +23,7 @@ typedef struct {
     OrbitParams orbitparams;
     Color color;
     char* name;
+    int planetID;
 } Planet;
 
 #endif
