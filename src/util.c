@@ -56,53 +56,6 @@ char* Strsub(char* str, int startIdx, int endIdx) {
     return result;
 }
 
-int StrToInt(char* str) {
-    int num = 0;
-    char* p = str;
-
-    // handle sign
-    bool neg = false;
-    if (*p == '-') { neg = true; p++; }
-    
-    while (*p != '\0') {
-        if (!(*p >= '0' && *p <= '9')) return 0;
-        
-        num = num * 10 + (*p - '0');
-        p++;
-    }
-        
-    return neg ? -num : num;
-}
-
-double StrToDouble(char* str) {
-    double num = 0;
-    char* p = str;
-
-    // handle sign
-    bool neg = false;
-    if (*p == '-') { neg = true; p++; }
-
-    bool fraction = false;
-    int fractionAmt = 1;
-
-    while (*p != '\0') {
-        char c = *p;
-        if (c == '.' || c == ',') { fraction = true; p++; continue; }
-
-        if (!(c >= '0' && c <= '9') && (c != '.' && c != ',')) return 0;
-        
-        if (fraction) {
-            num += (c - '0') / pow(10, fractionAmt);
-            fractionAmt++;
-        } else
-            num = num * 10 + (c - '0'); 
-
-        p++;
-    }
-
-    return neg ? -num : num;
-}
-
 Color HexToRGB(int hex) {
     int r = (hex >> 16) & 0xFF;
     int g = (hex >> 8) & 0xFF;

@@ -1,7 +1,6 @@
 #include <ncurses.h>
 #include <stdlib.h>
 #include <string.h>
-#include "util.h"
 #include "cli.h"
 
 const char* HELP_TEXT = "Usage: corbit [OPTIONS]...\n" 
@@ -32,7 +31,11 @@ void HandleArgument(CLIConfig* config, char* key, char* value) {
     if (value == NULL && (strcmp(key, "h")==0 || strcmp(key, "help")==0)) DisplayHelpText();
     if (value == NULL) return;
 
-    if (strcmp(key, "t")==0 || strcmp(key, "time")==0) { config->time = StrToDouble(value); return; }
+    if (strcmp(key, "t")==0 || strcmp(key, "time")==0) { 
+        double val = strtod(value, NULL);
+        config->time = val;
+        return; 
+    }
 
     if (strcmp(key, "s")==0 || strcmp(key, "system")==0) { config->system = value; return; }
 

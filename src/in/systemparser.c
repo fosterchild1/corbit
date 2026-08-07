@@ -121,13 +121,13 @@ Planet MakePlanetFromConfig(char* name, char* config, int startIdx, int endIdx) 
         int keyIdx = FindNextChar(config, '#', currIdx, endIdx);
         if (keyIdx == -1 || keyIdx > endIdx) break;
         currIdx = keyIdx + 1;
-        
+
         // read name and value
         char* keyName = ReadName(config, currIdx, endIdx);
         currIdx += strlen(keyName) + 1;
 
         char* strValue = ReadName(config, currIdx, endIdx);
-        double value = StrToDouble(strValue); 
+        double value = strtod(strValue, NULL); 
         if (strcmp(strValue, "") != 0) free(strValue); // free strValue if succesfully malloc'd
 
         // super ugly
