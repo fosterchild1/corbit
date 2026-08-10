@@ -1,10 +1,7 @@
-#ifndef RENDER_H
-#define RENDER_H
+#pragma once
 
 #include "simulation.h"
 
 void RenderScene(Scene scene);
 
 void FreeDepthBuf(void);
-
-#endif

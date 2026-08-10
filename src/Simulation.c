@@ -103,18 +103,27 @@ void CleanScene(Scene* scene) {
     scene->planetCapacity = 0;
 }
 
-void StepSimulation(Scene* scene, int seconds) {
-    float time = seconds/100.0;
+void StepSimulation(Scene* scene, int delta, bool isScreensaver) {
+    scene->elapsedTime += delta;
+    float time = delta/100.0;
 
     for (int i = 0; i < scene->planetCount; i++) {
         Planet* planet = &scene->planets[i];
         OrbitParams* orbit = &planet->orbitparams;
 
         // get delta and keep between 0-tau
-        double delta = M_TAU/sqrt(pow(orbit->smaxis, 3)) * time;
-        orbit->mna += delta;
+        double deltaOrbit = M_TAU/sqrt(pow(orbit->smaxis, 3)) * time;
+        orbit->mna += deltaOrbit;
         if (orbit->mna > M_TAU) orbit->mna -= M_TAU;
-    } 
+    }
+
+    // TODO: change these hardcoded values
+    if (!isScreensaver) return;
+    RotateScene(scene, 0, 0, 0.001 * delta);
+
+    Camera sceneCam = scene->camera;
+    sceneCam.viewAngle += 0.01 * delta;
+    if (sceneCam.viewAngle > 360) sceneCam.viewAngle-=360;
 }
 
 void RotateScene(Scene* scene, float lpe, float lan, float inc) {

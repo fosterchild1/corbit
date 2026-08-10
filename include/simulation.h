@@ -1,6 +1,6 @@
-#ifndef SIMULATION_H
-#define SIMULATION_H
+#pragma once
 
+#include <stdbool.h>
 #include "planet.h"
 
 #define M_PI 3.14159265358979323846
@@ -43,7 +43,5 @@ void AddToScene(Scene* scene, Planet* planet);
 void RemoveFromScene(Scene* scene, Planet* planet);
 void CleanScene(Scene* scene);
 
-void StepSimulation(Scene* scene, int seconds);
+void StepSimulation(Scene* scene, int delta, bool isScreensaver);
 void RotateScene(Scene* scene, float lpe, float lan, float inc);
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef UTIL_H
-#define UTIL_H
+#pragma once
 
 #include <stdlib.h>
 #include "simulation.h"
@@ -18,5 +17,3 @@ void* Safemalloc(size_t size);
 Color HexToRGB(int hex);
 
 void InitDefaultColorPairs(void);
-
-#endif

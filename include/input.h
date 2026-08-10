@@ -1,5 +1,4 @@
-#ifndef INPUT_H
-#define INPUT_H
+#pragma once
 
 #include "simulation.h"
 
@@ -9,5 +8,3 @@ void InitBinds(void);
 void RenderBinds(void);
 
 void HandleInput(Scene* scene, int ip);
-
-#endif

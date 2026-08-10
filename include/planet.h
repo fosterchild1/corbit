@@ -1,5 +1,4 @@
-#ifndef PLANET_H
-#define PLANET_H
+#pragma once
 
 #include <stdint.h>
 
@@ -25,5 +24,3 @@ typedef struct {
     char* name;
     int planetID;
 } Planet;
-
-#endif

@@ -37,7 +37,7 @@ int main(int charc, char* argv[]) {
     while (true) {
         RenderScene(mainScene);
         RenderBinds();
-        StepSimulation(&mainScene, config.time);
+        StepSimulation(&mainScene, config.time, config.screensaver);
         HandleInput(&mainScene, getch());
         refresh();
 
