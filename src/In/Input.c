@@ -4,13 +4,14 @@
 #include "input.h"
 #include "render.h"
 #include "simulation.h"
+#include "systemparser.h"
 #include "util.h"
 
 const float ROT_AMT = M_TAU/200;
 const char* FULL_TEXT = "1/3 zoom arrow keys rotate q quit h hide";
 
 static InputBind bindFunctions[512];
-static bool ShouldRenderBinds = true;
+static bool shouldRenderBinds = true;
 static int xPos = 0;
 
 
@@ -58,7 +59,7 @@ void ExitProgram(Scene* scene) {
 
 void ToggleBinds(Scene* scene) {
     (void)scene;
-    ShouldRenderBinds = !ShouldRenderBinds;
+    shouldRenderBinds = !shouldRenderBinds;
 }
 
 void InitBinds(void) {
@@ -94,7 +95,7 @@ void PutStr(int bottom, char* str, int color) {
 }
 
 void RenderBinds(void) {
-    if (!ShouldRenderBinds) return;
+    if (!shouldRenderBinds) return;
 
     int height, width;
     getmaxyx(stdscr, height, width);

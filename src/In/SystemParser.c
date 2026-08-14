@@ -13,7 +13,8 @@
 ..etc
 */
 
-const char* systemsDir = "/.config/corbit/systems";
+const char* SYSTEMS_DIR = "/.config/corbit/systems";
+const char* AVAILABLE_SYSTEMS[7] = {"sol","jov","sat","ura","nep","plu","ker"};
 
 char* ReadFile(char* dir) {
     FILE* file = fopen(dir, "r");
@@ -37,10 +38,10 @@ char* ReadSystemsFile(void) {
     char* homeDir = getenv("HOME");
     if (homeDir == NULL) exit(EXIT_FAILURE);
 
-    int dirLen = strlen(homeDir) + strlen(systemsDir);
+    int dirLen = strlen(homeDir) + strlen(SYSTEMS_DIR);
     char fileDir[dirLen + 1];
     strcpy(fileDir, homeDir);
-    strncat(fileDir, systemsDir, dirLen);
+    strncat(fileDir, SYSTEMS_DIR, dirLen);
     fileDir[dirLen] = '\0';
     
     return ReadFile(fileDir);
@@ -58,7 +59,7 @@ int FindNextChar(char* str, char ch, int startIdx, int len) {
     return -1;
 }
 
-char* ReadName(char* str, int startIdx, int len) {
+char* ReadString(char* str, int startIdx, int len) {
     if (startIdx + 1 > len) return "";
     char* p = str + startIdx;
     
@@ -96,7 +97,7 @@ char* GetSystemConfig(char* contents, char* system) {
         if (nameStartIdx == -1) return "";
         currIdx  = nameStartIdx + 1;
 
-        char* systemName = ReadName(contents, currIdx, contentsLen);
+        char* systemName = ReadString(contents, currIdx, contentsLen);
         currIdx += strlen(systemName);
 
         int isSameSystem = strcmp(systemName, system) == 0; free(systemName);
@@ -123,10 +124,10 @@ Planet MakePlanetFromConfig(char* name, char* config, int startIdx, int endIdx) 
         currIdx = keyIdx + 1;
 
         // read name and value
-        char* keyName = ReadName(config, currIdx, endIdx);
+        char* keyName = ReadString(config, currIdx, endIdx);
         currIdx += strlen(keyName) + 1;
 
-        char* strValue = ReadName(config, currIdx, endIdx);
+        char* strValue = ReadString(config, currIdx, endIdx);
         double value = strtod(strValue, NULL); 
         if (strcmp(strValue, "") != 0) free(strValue); // free strValue if succesfully malloc'd
 
@@ -139,7 +140,6 @@ Planet MakePlanetFromConfig(char* name, char* config, int startIdx, int endIdx) 
 }
 
 void InitScene(Scene* scene, char* system) {
-    (void)scene;
     char* contents = ReadSystemsFile();
     char* systemConfig = GetSystemConfig(contents, system);
     if (strcmp(systemConfig, "") == 0) return;
@@ -153,7 +153,7 @@ void InitScene(Scene* scene, char* system) {
         currIdx = planetStartIdx + 1;
 
         // get name
-        char* planetName = ReadName(systemConfig, currIdx, configLen);
+        char* planetName = ReadString(systemConfig, currIdx, configLen);
         currIdx += strlen(planetName);
     
         // get end idx of the planet config, then make it and add to scene
@@ -165,4 +165,9 @@ void InitScene(Scene* scene, char* system) {
     }
 
     free(contents); free(systemConfig);
+}
+
+void SwitchScene(Scene* scene, char* system) {
+    CleanScene(scene);
+    InitScene(scene, system);
 }

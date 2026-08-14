@@ -37,7 +37,6 @@ FPoint3 GetPointOnElipse(float xLocal, float yLocal, float trigArr[6]) {
 void* Safemalloc(size_t size) {
     void* p = malloc(size);
     if (p == NULL) {
-        endwin();
         exit(EXIT_FAILURE);
     }
 

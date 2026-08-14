@@ -2,13 +2,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include "cli.h"
+#include "input.h"
+#include "systemparser.h"
 
 const char* HELP_TEXT = "Usage: corbit [OPTION]...\n" 
 "Options:\n"
 "-t --time [TIME]       advance TIME step each tick\n"
 "-s --system [SYSTEM]   system to simulate\n"
 "-c --screensaver       screensaver mode. speed is affected by -t\n"  
-"Available systems: sol,jov,sat,ura,nep,plu,ker";
+"Available systems: ";
 
 const CLIConfig DEFAULT_CONFIG = {.time=1, .system="sol", .screensaver=false};
 
@@ -24,6 +26,15 @@ int ContainsEqual(char* str) {
 
 void DisplayHelpText(void) {
     printf("%s", HELP_TEXT);
+
+    int arrSize = sizeof(AVAILABLE_SYSTEMS) / sizeof(AVAILABLE_SYSTEMS[0]);
+    for (int i = 0; i < arrSize; i++) {
+        if (i == arrSize - 1)
+            puts(AVAILABLE_SYSTEMS[i]);
+        else 
+            printf("%s,", AVAILABLE_SYSTEMS[i]);
+    }
+
     exit(EXIT_SUCCESS);
 }
 
@@ -75,6 +86,8 @@ CLIConfig ParseCLI(int argc, char* argv[]) {
     if (lastArg != NULL) { 
         HandleArgument(&config, lastArg, NULL);
     }
+
+    if (config.screensaver) ToggleBinds((Scene*)1); // hide keybinds, cast to Scene* as it isnt used anyway
     
     return config;
 }
