@@ -1,11 +1,11 @@
 #include <ncurses.h>
 #include <locale.h>
-#include "input.h"
-#include "simulation.h"
-#include "render.h"
-#include "cli.h"
+#include "In/input.h"
+#include "In/cli.h"
+#include "In/systemparser.h"
+#include "Simulation/simulation.h"
+#include "Simulation/render.h"
 #include "util.h"
-#include "systemparser.h"
 
 void Initncurses(void) {
     setlocale(LC_ALL, "");

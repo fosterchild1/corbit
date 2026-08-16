@@ -1,6 +1,6 @@
 #pragma once
 
-#include "simulation.h"
+#include "scene.h"
 
 void RenderScene(Scene scene);
 

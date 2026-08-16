@@ -4,7 +4,6 @@
 #include "input.h"
 #include "render.h"
 #include "simulation.h"
-#include "systemparser.h"
 #include "util.h"
 
 const float ROT_AMT = M_TAU/200;

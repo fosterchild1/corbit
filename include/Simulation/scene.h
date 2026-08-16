@@ -3,12 +3,10 @@
 #include <stdbool.h>
 #include "planet.h"
 
-#define M_PI 3.14159265358979323846
-#define M_TAU 2*M_PI
-
-#define TERM_FONT_RATIO 1.5 // fonts are taller than wide
-
-#define DimColor(c) (((c) > 35) ? ((c) - 35) : 0)
+typedef struct {
+    float viewAngle;
+    float zoom;
+} Camera;
 
 typedef struct {
     int x;
@@ -20,11 +18,6 @@ typedef struct {
     float y;
     float z;
 } FPoint3;
-
-typedef struct {
-    float viewAngle;
-    float zoom;
-} Camera;
 
 typedef struct {
     Planet* planets;

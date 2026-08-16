@@ -3,7 +3,7 @@
 #include <ncurses.h>
 #include <math.h>
 #include <string.h>
-#include "simulation.h"
+#include "Simulation/scene.h"
 #include "util.h"
 
 static int8_t* depthBuf;

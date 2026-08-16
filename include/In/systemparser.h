@@ -1,6 +1,6 @@
 #pragma once
 
-#include "simulation.h"
+#include "Simulation/scene.h"
 
 extern const char* AVAILABLE_SYSTEMS[7];
 

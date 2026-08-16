@@ -1,6 +1,6 @@
 #pragma once
 
-#include "simulation.h"
+#include "Simulation/scene.h"
 
 typedef void (*InputBind)(Scene* scene);
 

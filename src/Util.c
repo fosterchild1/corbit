@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "simulation.h"
+#include "Simulation/scene.h"
 
 float CalculateEccentricAnomaly(double mna, float ecc) {
     // use newton-raphson to approximate E.

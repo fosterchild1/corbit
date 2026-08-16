@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
-#include "simulation.h"
+#include "scene.h"
 #include "util.h"
 
 /* example system:
@@ -95,7 +95,7 @@ char* GetSystemConfig(char* contents, char* system) {
     while (true) {
         int nameStartIdx = FindNextChar(contents, '.', currIdx, contentsLen);
         if (nameStartIdx == -1) return "";
-        currIdx  = nameStartIdx + 1;
+        currIdx = nameStartIdx + 1;
 
         char* systemName = ReadString(contents, currIdx, contentsLen);
         currIdx += strlen(systemName);
