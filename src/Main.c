@@ -1,4 +1,5 @@
 #include <ncurses.h>
+#include <locale.h>
 #include "input.h"
 #include "simulation.h"
 #include "render.h"
@@ -7,6 +8,7 @@
 #include "systemparser.h"
 
 void Initncurses(void) {
+    setlocale(LC_ALL, "");
     initscr();
     noecho();
     cbreak(); 

@@ -14,7 +14,7 @@ INC := -I include
 all: $(TARGET)
 
 $(TARGET): $(OBJECTS) | $(BINDIR)
-	$(CC) $(CFLAGS) $(OBJECTS) -o $(TARGET) -lncurses -lm
+	$(CC) $(CFLAGS) $(OBJECTS) -o $(TARGET) -lncursesw -lm
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.c | $(BUILDDIR)
 	@mkdir -p $(dir $@)

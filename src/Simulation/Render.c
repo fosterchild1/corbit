@@ -1,3 +1,5 @@
+#define _XOPEN_SOURCE_EXTENDED 1
+
 #include <ncurses.h>
 #include <math.h>
 #include <string.h>
@@ -5,6 +7,8 @@
 #include "util.h"
 
 static int8_t* depthBuf;
+
+const wchar_t PLANET_CHAR[2] = {9679, '\0'};
 
 void RenderOrbit(Planet planet, Camera camera, Point center) {
     OrbitParams orbit = planet.orbitparams;
@@ -45,7 +49,7 @@ void RenderOrbit(Planet planet, Camera camera, Point center) {
         int8_t depth = point.y * cosf(viewRad) + point.z * sinf(viewRad);
         int depthIdx = (targetY * xc * 2) + targetX;
         if (depthBuf[depthIdx] <= depth) continue;
-        
+
         depthBuf[depthIdx] = depth;
         lastY = targetY; lastX = targetX;
         mvaddch(targetY, targetX, ':' | COLOR_PAIR(planet.color.colorID+1));
@@ -76,14 +80,13 @@ void RenderPlanet(Planet planet, Camera camera, Point center) {
     
     FPoint3 planetPos = GetPointOnElipse(planetXLocal, planetYLocal, trigArr);
     float camY = (planetPos.y * sin(viewRad) - planetPos.z * cos(viewRad)) / TERM_FONT_RATIO;
-
     // render planet
     int planetY = roundf(yc-camY); int planetX = roundf(xc+planetPos.x);
-    mvaddch(planetY, planetX, 'O' | COLOR_PAIR(planet.color.colorID)); 
+    attron(COLOR_PAIR(planet.color.colorID));
+    mvaddwstr(planetY, planetX, PLANET_CHAR); 
    
     // render name
     char* name = planet.name;
-    attron(COLOR_PAIR(planet.color.colorID));
     mvaddstr(planetY-1, planetX+2, name);
     attroff(COLOR_PAIR(planet.color.colorID));
 }
