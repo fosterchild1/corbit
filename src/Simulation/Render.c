@@ -13,7 +13,6 @@ const wchar_t PLANET_CHAR[2] = {9679, '\0'};
 void RenderOrbit(Planet planet, Camera camera, Point center) {
     OrbitParams orbit = planet.orbitparams;
     float ecc = orbit.eccentricity;
-    float viewRad = rad(camera.viewAngle);
 
     // build trig array
     double lan = orbit.lan;
@@ -24,7 +23,7 @@ void RenderOrbit(Planet planet, Camera camera, Point center) {
     int a = orbit.smaxis * camera.zoom;
     int b = (int)(sqrt(1 - ecc*ecc) * a); // semi minor axis
 
-    float step = 1.0/max(a, b);
+    float step = 1.0f/max(a, b);
 
     int xc = center.x;
     int yc = center.y;
@@ -37,29 +36,32 @@ void RenderOrbit(Planet planet, Camera camera, Point center) {
         float yLocal = b * sinf(theta);
         
         FPoint3 point = GetPointOnElipse(xLocal, yLocal, trigArr);
-        float camY = (point.y * sinf(viewRad) - point.z * cosf(viewRad)) / TERM_FONT_RATIO;
+        float camY = (point.y * camera.viewSin - point.z * camera.viewCos) * INV_TERM_FONT_RATIO;
+        float targetY = yc-camY; float targetX = xc+point.x;
 
-        int targetY = roundf(yc-camY); int targetX = roundf(xc+point.x);
-        // ensure targetY and targetX are on screen
-        if ((targetY == lastY && targetX == lastX) || 
-            (targetY >= yc*2 || targetX >= xc*2)   ||
+        // ensure the difference is enough for the orbit char to not overlap with the previous
+        // and that roundX and roundY will be on screen
+        if ((fabs(targetY - lastY) < 0.5f && fabs(targetX - lastX) < 0.5f) || 
+            (targetY + 0.5f >= yc*2 || targetX + 0.5f >= xc*2)             ||
             (targetY < 0 || targetX < 0)) continue;
 
+        int roundY = roundf(targetY); int roundX = roundf(targetX);
+
         // get depth
-        int8_t depth = point.y * cosf(viewRad) + point.z * sinf(viewRad);
-        int depthIdx = (targetY * xc * 2) + targetX;
+        int8_t depth = point.y * camera.viewCos + point.z * camera.viewSin;
+        int depthIdx = (roundY * xc * 2) + roundX;
         if (depthBuf[depthIdx] <= depth) continue;
 
+        // put orbit char
         depthBuf[depthIdx] = depth;
         lastY = targetY; lastX = targetX;
-        mvaddch(targetY, targetX, ':' | COLOR_PAIR(planet.color.colorID+1));
+        mvaddch(roundY, roundX, ':' | COLOR_PAIR(planet.color.colorID+1));
     }
 }
 
 void RenderPlanet(Planet planet, Camera camera, Point center) {
     OrbitParams orbit = planet.orbitparams;
     float ecc = orbit.eccentricity;
-    float viewRad = camera.viewAngle * M_PI/180.0;
 
     // build trig array
     double lan = orbit.lan;
@@ -79,7 +81,7 @@ void RenderPlanet(Planet planet, Camera camera, Point center) {
     float planetYLocal = b * sinf(E);
     
     FPoint3 planetPos = GetPointOnElipse(planetXLocal, planetYLocal, trigArr);
-    float camY = (planetPos.y * sin(viewRad) - planetPos.z * cos(viewRad)) / TERM_FONT_RATIO;
+    float camY = (planetPos.y * camera.viewSin - planetPos.z * camera.viewCos) / TERM_FONT_RATIO;
     // render planet
     int planetY = roundf(yc-camY); int planetX = roundf(xc+planetPos.x);
     attron(COLOR_PAIR(planet.color.colorID));

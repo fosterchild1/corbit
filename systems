@@ -469,3 +469,34 @@ indentation is not required
         #mna 4,460000
         #ecc 0,470000
         #inc 0,000200
+
+.sph
+    -Axis
+        #col 13389885
+
+        #sma 30
+        #lpe 0
+        #lan 0
+        #mna 0
+        #ecc 0
+        #inc 1,570796
+
+    -Axis
+        #col 4024012
+
+        #sma 30
+        #lpe 1,570796
+        #lan 0
+        #mna 0
+        #ecc 0
+        #inc 0
+
+    -Axis
+        #col 4049991
+
+        #sma 30
+        #lpe 0
+        #lan 1,570796
+        #mna 0
+        #ecc 0
+        #inc 0

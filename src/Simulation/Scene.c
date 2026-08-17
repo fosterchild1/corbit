@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <math.h>
 #include <ncurses.h>
 #include "In/systemparser.h"
 #include "Simulation/scene.h"
@@ -28,8 +29,7 @@ Planet CreatePlanet(OrbitParams* orbit, Color* color, char* name) {
     // initialize color
     if (colorID > COLORS) {
         // color limit reached, choose random one
-        int randId = (rand() % (COLORS - 31)) + 16;
-        color->colorID = randId;
+        color->colorID = RandInt(17, COLORS);
 
     } else {
         InitPlanetColors(colorID, *color);
@@ -38,6 +38,17 @@ Planet CreatePlanet(OrbitParams* orbit, Color* color, char* name) {
     }
 
     return (Planet){*orbit, *color, name, .planetID = -1};
+}
+
+void UpdateViewAngle(Scene* scene, float rotAmt) {
+    Camera* camera = &scene->camera;
+
+    camera->viewAngle += rotAmt;
+    if (camera->viewAngle > 360) camera->viewAngle-=360;
+    if (camera->viewAngle < 0) camera->viewAngle+=360;
+
+    float viewRad = rad(camera->viewAngle);
+    camera->viewSin = sinf(viewRad); camera->viewCos = cosf(viewRad);
 }
 
 void AddToScene(Scene* scene, Planet* planet) {

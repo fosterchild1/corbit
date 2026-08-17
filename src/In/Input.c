@@ -15,19 +15,11 @@ static int xPos = 0;
 
 
 void RotateUp(Scene* scene) {
-    (void)scene;
-    Camera* camera = &scene->camera;
-
-    camera->viewAngle += ROT_AMT*180;
-    if (camera->viewAngle > 360) camera->viewAngle-=360;
+    UpdateViewAngle(scene, ROT_AMT*180);
 }
 
 void RotateDown(Scene* scene) {
-    (void)scene;
-    Camera* camera = &scene->camera;
-
-    camera->viewAngle -= ROT_AMT*180;
-    if (camera->viewAngle > 360) camera->viewAngle-=360;
+    UpdateViewAngle(scene, -ROT_AMT*180);
 }
 
 void RotateRight(Scene* scene) {
@@ -47,7 +39,6 @@ void ZoomOut(Scene* scene) {
 }
 
 void ExitProgram(Scene* scene) { 
-    (void)scene; 
     FreeDepthBuf();
     CleanScene(scene);
     

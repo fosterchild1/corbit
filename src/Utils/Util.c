@@ -34,6 +34,10 @@ FPoint3 GetPointOnElipse(float xLocal, float yLocal, float trigArr[6]) {
     return (FPoint3){x, y, z};
 }
 
+int RandInt(int min, int max) {
+    return rand() % (max - min + 2);
+}
+
 void* Safemalloc(size_t size) {
     void* p = malloc(size);
     if (p == NULL) {

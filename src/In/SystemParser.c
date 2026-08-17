@@ -14,7 +14,8 @@
 */
 
 const char* SYSTEMS_DIR = "/.config/corbit/systems";
-const char* AVAILABLE_SYSTEMS[7] = {"sol","jov","sat","ura","nep","plu","ker"};
+const char* AVAILABLE_SYSTEMS[8] = {"sol", "jov", "sat", "ura", "nep", "plu", "ker", "sph"};
+
 
 char* ReadFile(char* dir) {
     FILE* file = fopen(dir, "r");
@@ -162,6 +163,10 @@ void InitScene(Scene* scene, char* system) {
 
         Planet planet = MakePlanetFromConfig(planetName, systemConfig, currIdx, nextPlanetIdx);
         AddToScene(scene, &planet);
+
+        #ifdef BENCH
+            for (int i = 0; i < 500; i++) AddToScene(scene, &planet);
+        #endif
     }
 
     free(contents); free(systemConfig);

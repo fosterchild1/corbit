@@ -7,6 +7,9 @@
 typedef struct {
     float viewAngle;
     float zoom;
+
+    float viewSin;
+    float viewCos;
 } Camera;
 
 typedef struct {
@@ -31,7 +34,8 @@ typedef struct {
 
 Planet CreatePlanet(OrbitParams* params, Color* color, char* name);
 
+void UpdateViewAngle(Scene* scene, float rotAmt);
+
 void AddToScene(Scene* scene, Planet* planet);
-void RemoveFromScene(Scene* scene, Planet* planet);
 void SwitchScene(Scene* scene, char* name);
 void CleanScene(Scene* scene);

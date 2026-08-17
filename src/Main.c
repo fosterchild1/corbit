@@ -33,7 +33,7 @@ int main(int charc, char* argv[]) {
     int width, height;
     getmaxyx(stdscr, height, width);
 
-    Scene mainScene = {.planetArray = Array_New(sizeof(Planet)), .center = {width/2, height/2}, .camera = {90, 1},
+    Scene mainScene = {.planetArray = Array_New(sizeof(Planet)), .center = {width/2, height/2}, .camera = {90, 1, 1, 0},
                        .elapsedTime = 0};
 
     InitScene(&mainScene, config.system);

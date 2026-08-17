@@ -35,9 +35,8 @@ void* Array_Remove(Array* array, int index) {
     int newSize = --array->len;
 
     // shift all elements after index backwards by 1
-    for (int i = index; i < newSize; i++) {
-        memmove((char*)array->data + i * elemSize, (char*)array->data + (i+1) * elemSize, elemSize);
-    }
+    char* dst = (char*)array->data + index * elemSize;
+    memmove(dst, dst + elemSize, (newSize - index) * elemSize);
   
     // TODO: return element
     if (newSize == 0) {
