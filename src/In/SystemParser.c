@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
-#include "scene.h"
-#include "util.h"
+#include "Simulation/scene.h"
+#include "Utils/util.h"
 
 /* example system:
 .sol
@@ -165,9 +165,4 @@ void InitScene(Scene* scene, char* system) {
     }
 
     free(contents); free(systemConfig);
-}
-
-void SwitchScene(Scene* scene, char* system) {
-    CleanScene(scene);
-    InitScene(scene, system);
 }

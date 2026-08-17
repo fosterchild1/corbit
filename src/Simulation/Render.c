@@ -4,7 +4,7 @@
 #include <math.h>
 #include <string.h>
 #include "Simulation/scene.h"
-#include "util.h"
+#include "Utils/util.h"
 
 static int8_t* depthBuf;
 
@@ -93,6 +93,7 @@ void RenderPlanet(Planet planet, Camera camera, Point center) {
 
 void RenderScene(Scene scene) {
     Point center = scene.center;
+    Planet* planets = (Planet*)scene.planetArray.data;
 
     // handle depth buffer
     int bufSize = center.x * center.y * 4;
@@ -100,13 +101,13 @@ void RenderScene(Scene scene) {
     memset(depthBuf, INT8_MAX, bufSize);
 
     // render planet orbits
-    for (int i = 0; i < scene.planetCount; i++) {
-        RenderOrbit(scene.planets[i], scene.camera, center);
+    for (int i = 0; i < scene.planetArray.len; i++) {
+        RenderOrbit(planets[i], scene.camera, center);
     }
 
     // render planets and their names above the orbits
-    for (int i = 0; i < scene.planetCount; i++) {
-        RenderPlanet(scene.planets[i], scene.camera, center);
+    for (int i = 0; i < scene.planetArray.len; i++) {
+        RenderPlanet(planets[i], scene.camera, center);
     }
 
     mvaddch(center.y, center.x, '*');

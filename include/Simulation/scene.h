@@ -2,6 +2,7 @@
 
 #include <stdbool.h>
 #include "planet.h"
+#include "Utils/array.h"
 
 typedef struct {
     float viewAngle;
@@ -20,9 +21,7 @@ typedef struct {
 } FPoint3;
 
 typedef struct {
-    Planet* planets;
-    int planetCount;
-    int planetCapacity;
+    Array planetArray;
 
     Point center;
     Camera camera;
@@ -34,7 +33,5 @@ Planet CreatePlanet(OrbitParams* params, Color* color, char* name);
 
 void AddToScene(Scene* scene, Planet* planet);
 void RemoveFromScene(Scene* scene, Planet* planet);
+void SwitchScene(Scene* scene, char* name);
 void CleanScene(Scene* scene);
-
-void StepSimulation(Scene* scene, int delta, bool isScreensaver);
-void RotateScene(Scene* scene, float lpe, float lan, float inc);

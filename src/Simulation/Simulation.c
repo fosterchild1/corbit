@@ -1,13 +1,15 @@
 #include <math.h>
 #include <ncurses.h>
-#include "util.h"
+#include "Simulation/simulation.h"
+#include "Utils/util.h"
 
 void StepSimulation(Scene* scene, int delta, bool isScreensaver) {
     scene->elapsedTime += delta;
     float time = delta/100.0;
 
-    for (int i = 0; i < scene->planetCount; i++) {
-        Planet* planet = &scene->planets[i];
+    // advance planet deltas
+    for (int i = 0; i < scene->planetArray.len; i++) {
+        Planet* planet = &((Planet*)scene->planetArray.data)[i];
         OrbitParams* orbit = &planet->orbitparams;
 
         // get delta and keep between 0-tau
@@ -16,6 +18,7 @@ void StepSimulation(Scene* scene, int delta, bool isScreensaver) {
         if (orbit->mna > M_TAU) orbit->mna -= M_TAU;
     }
 
+    // handle screensaver mode
     // TODO: change these hardcoded values
     if (!isScreensaver) return;
     RotateScene(scene, 0, 0, 0.001 * delta);
@@ -26,8 +29,8 @@ void StepSimulation(Scene* scene, int delta, bool isScreensaver) {
 }
 
 void RotateScene(Scene* scene, float lpe, float lan, float inc) {
-    for (int i = 0; i < scene->planetCount; i++) {
-        Planet* planet = &scene->planets[i];
+    for (int i = 0; i < scene->planetArray.len; i++) {
+        Planet* planet = &((Planet*)scene->planetArray.data)[i];
         OrbitParams* orbit = &planet->orbitparams;
 
         orbit->lpe += lpe;

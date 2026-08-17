@@ -1,10 +1,10 @@
 #include <ncurses.h>
 #include <stdlib.h>
 #include <string.h>
-#include "input.h"
-#include "render.h"
-#include "simulation.h"
-#include "util.h"
+#include "In/input.h"
+#include "Simulation/render.h"
+#include "Simulation/simulation.h"
+#include "Utils/util.h"
 
 const float ROT_AMT = M_TAU/200;
 const char* FULL_TEXT = "1/3 zoom arrow keys rotate q quit h hide";

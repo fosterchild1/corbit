@@ -1,7 +1,8 @@
 #include <stdlib.h>
 #include <ncurses.h>
+#include "In/systemparser.h"
 #include "Simulation/scene.h"
-#include "util.h"
+#include "Utils/util.h"
 
 static short colorID=16;
 
@@ -36,68 +37,24 @@ Planet CreatePlanet(OrbitParams* orbit, Color* color, char* name) {
         colorID += 2;
     }
 
-    return (Planet){*orbit, *color, name, -1};
+    return (Planet){*orbit, *color, name, .planetID = -1};
 }
 
 void AddToScene(Scene* scene, Planet* planet) {
-    int currSize = scene->planetCapacity;
-    int neededSize = scene->planetCount + 1;
-    
-    // resize if needed
-    if (neededSize > currSize) {
-        if (currSize == 0) currSize = 1;
-        int newSize = currSize * 2;
-
-        Planet* temp = realloc(scene->planets, sizeof(Planet) * newSize);
-        if (temp == NULL) exit(EXIT_FAILURE);
-        
-        scene->planetCapacity = newSize;
-        scene->planets = temp;
-    }
-
-    planet->planetID = scene->planetCount;
-
-    scene->planetCount += 1;
-    scene->planets[neededSize - 1] = *planet;
+    Array_Insert(&scene->planetArray, planet);
+    planet->planetID = scene->planetArray.len;
 }
 
-void RemoveFromScene(Scene* scene, Planet* planet) {
-    int id = planet->planetID;
-    if (id < 0) return; // not in scene
-    free(scene->planets[id].name);
-    planet->planetID = -1;
-
-    // shift all planet indexes after the removing planet down by one
-    int newSize = --scene->planetCount;
-
-    for (int i = id; i < newSize; i++) {
-        scene->planets[i] = scene->planets[i + 1];
-        scene->planets[i].planetID = i;
-    }
-
-    if (newSize == 0) {
-        free(scene->planets);
-        scene->planets = NULL;
-        scene->planetCapacity = 0;
-        scene->planetCount = 0;
-
-        return;
-    }
-    
-    Planet* newScenePlanets = realloc(scene->planets, sizeof(Planet) * newSize);
-    if (newScenePlanets == NULL) exit(EXIT_FAILURE);
-    
-    scene->planets = newScenePlanets;
-    scene->planetCapacity = newSize;
+void SwitchScene(Scene* scene, char* system) {
+    CleanScene(scene);
+    InitScene(scene, system);
 }
 
 void CleanScene(Scene* scene) {
-    for (int i = 0; i < scene->planetCount; i++) {
-        free(scene->planets[i].name);
+    Planet* planets = (Planet*)scene->planetArray.data; (void)planets;
+    for (int i = 0; i < scene->planetArray.len; i++) {
+        free(planets[i].name);
     }
-    free(scene->planets);
-    scene->planets = NULL;
 
-    scene->planetCount = 0;
-    scene->planetCapacity = 0;
+    Array_Free(&scene->planetArray);
 }

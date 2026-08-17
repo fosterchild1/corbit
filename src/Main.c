@@ -5,7 +5,7 @@
 #include "In/systemparser.h"
 #include "Simulation/simulation.h"
 #include "Simulation/render.h"
-#include "util.h"
+#include "Utils/util.h"
 
 void Initncurses(void) {
     setlocale(LC_ALL, "");
@@ -33,7 +33,9 @@ int main(int charc, char* argv[]) {
     int width, height;
     getmaxyx(stdscr, height, width);
 
-    Scene mainScene = {NULL, 0, 0, {width/2, height/2}, {90, 1}, 0};
+    Scene mainScene = {.planetArray = Array_New(sizeof(Planet)), .center = {width/2, height/2}, .camera = {90, 1},
+                       .elapsedTime = 0};
+
     InitScene(&mainScene, config.system);
 
     while (true) {

@@ -1,9 +1,9 @@
 #include <ncurses.h>
 #include <stdlib.h>
 #include <string.h>
-#include "cli.h"
-#include "input.h"
-#include "systemparser.h"
+#include "In/cli.h"
+#include "In/input.h"
+#include "In/systemparser.h"
 
 const char* HELP_TEXT = "Usage: corbit [OPTION]...\n" 
 "Options:\n"
