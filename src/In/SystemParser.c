@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
-#include "simulation.h"
-#include "util.h"
+#include "Simulation/scene.h"
+#include "Utils/util.h"
 
 /* example system:
 .sol
@@ -13,7 +13,8 @@
 ..etc
 */
 
-const char* systemsDir = "/.config/corbit/systems";
+const char* SYSTEMS_DIR = "/.config/corbit/systems";
+const char* AVAILABLE_SYSTEMS[8] = {"sol", "jov", "sat", "ura", "nep", "plu", "ker", "sph"};
 
 char* ReadFile(char* dir) {
     FILE* file = fopen(dir, "r");
@@ -24,9 +25,7 @@ char* ReadFile(char* dir) {
     long fileSize = ftell(file);
     fseek(file, 0, SEEK_SET);
 
-    char *string = malloc(fileSize + 1);
-    if (string == NULL) exit(EXIT_FAILURE);
-
+    char *string = Safemalloc(fileSize + 1);
     fread(string, fileSize, 1, file);
     fclose(file);
     
@@ -37,10 +36,12 @@ char* ReadFile(char* dir) {
 char* ReadSystemsFile(void) {
     // get file directory
     char* homeDir = getenv("HOME");
-    int dirLen = strlen(homeDir) + strlen(systemsDir);
+    if (homeDir == NULL) exit(EXIT_FAILURE);
+
+    int dirLen = strlen(homeDir) + strlen(SYSTEMS_DIR);
     char fileDir[dirLen + 1];
     strcpy(fileDir, homeDir);
-    strncat(fileDir, systemsDir, dirLen);
+    strncat(fileDir, SYSTEMS_DIR, dirLen);
     fileDir[dirLen] = '\0';
     
     return ReadFile(fileDir);
@@ -58,7 +59,7 @@ int FindNextChar(char* str, char ch, int startIdx, int len) {
     return -1;
 }
 
-char* ReadName(char* str, int startIdx, int len) {
+char* ReadString(char* str, int startIdx, int len) {
     if (startIdx + 1 > len) return "";
     char* p = str + startIdx;
     
@@ -94,9 +95,9 @@ char* GetSystemConfig(char* contents, char* system) {
     while (true) {
         int nameStartIdx = FindNextChar(contents, '.', currIdx, contentsLen);
         if (nameStartIdx == -1) return "";
-        currIdx  = nameStartIdx + 1;
+        currIdx = nameStartIdx + 1;
 
-        char* systemName = ReadName(contents, currIdx, contentsLen);
+        char* systemName = ReadString(contents, currIdx, contentsLen);
         currIdx += strlen(systemName);
 
         int isSameSystem = strcmp(systemName, system) == 0; free(systemName);
@@ -121,13 +122,13 @@ Planet MakePlanetFromConfig(char* name, char* config, int startIdx, int endIdx) 
         int keyIdx = FindNextChar(config, '#', currIdx, endIdx);
         if (keyIdx == -1 || keyIdx > endIdx) break;
         currIdx = keyIdx + 1;
-        
+
         // read name and value
-        char* keyName = ReadName(config, currIdx, endIdx);
+        char* keyName = ReadString(config, currIdx, endIdx);
         currIdx += strlen(keyName) + 1;
 
-        char* strValue = ReadName(config, currIdx, endIdx);
-        double value = StrToDouble(strValue); 
+        char* strValue = ReadString(config, currIdx, endIdx);
+        double value = strtod(strValue, NULL); 
         if (strcmp(strValue, "") != 0) free(strValue); // free strValue if succesfully malloc'd
 
         // super ugly
@@ -138,8 +139,7 @@ Planet MakePlanetFromConfig(char* name, char* config, int startIdx, int endIdx) 
     return CreatePlanet(&orbit, &color, name);
 }
 
-void InitScene(Scene* scene, char* system) {
-    (void)scene;
+void InitScenePlanetsFromSystem(Scene* scene, char* system) {
     char* contents = ReadSystemsFile();
     char* systemConfig = GetSystemConfig(contents, system);
     if (strcmp(systemConfig, "") == 0) return;
@@ -153,7 +153,7 @@ void InitScene(Scene* scene, char* system) {
         currIdx = planetStartIdx + 1;
 
         // get name
-        char* planetName = ReadName(systemConfig, currIdx, configLen);
+        char* planetName = ReadString(systemConfig, currIdx, configLen);
         currIdx += strlen(planetName);
     
         // get end idx of the planet config, then make it and add to scene
@@ -161,7 +161,11 @@ void InitScene(Scene* scene, char* system) {
         nextPlanetIdx = (nextPlanetIdx == -1) ? configLen - 1 : nextPlanetIdx;
 
         Planet planet = MakePlanetFromConfig(planetName, systemConfig, currIdx, nextPlanetIdx);
-        AddToScene(scene, &planet);
+        Scene_AddPlanet(scene, &planet);
+
+        #ifdef BENCH
+            for (int i = 0; i < 500; i++) AddToScene(scene, &planet);
+        #endif
     }
 
     free(contents); free(systemConfig);

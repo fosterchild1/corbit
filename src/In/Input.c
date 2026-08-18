@@ -1,32 +1,25 @@
 #include <ncurses.h>
 #include <stdlib.h>
 #include <string.h>
-#include "input.h"
-#include "simulation.h"
-#include "util.h"
+#include "In/input.h"
+#include "Simulation/render.h"
+#include "Simulation/simulation.h"
+#include "Utils/util.h"
 
 const float ROT_AMT = M_TAU/200;
 const char* FULL_TEXT = "1/3 zoom arrow keys rotate q quit h hide";
 
 static InputBind bindFunctions[512];
-static bool ShouldRenderBinds = true;
+static bool shouldRenderBinds = true;
 static int xPos = 0;
 
 
 void RotateUp(Scene* scene) {
-    (void)scene;
-    Camera* camera = &scene->camera;
-
-    camera->viewAngle += ROT_AMT*180;
-    if (camera->viewAngle > 360) camera->viewAngle-=360;
+    UpdateViewAngle(scene, ROT_AMT*180);
 }
 
 void RotateDown(Scene* scene) {
-    (void)scene;
-    Camera* camera = &scene->camera;
-
-    camera->viewAngle -= ROT_AMT*180;
-    if (camera->viewAngle > 360) camera->viewAngle-=360;
+    UpdateViewAngle(scene, -ROT_AMT*180);
 }
 
 void RotateRight(Scene* scene) {
@@ -45,11 +38,18 @@ void ZoomOut(Scene* scene) {
     scene->camera.zoom = max(scene->camera.zoom * 0.95, 0.05);
 }
 
-void ExitProgram(Scene* scene) { (void)scene; endwin(); exit(0); }
+void ExitProgram(Scene* scene) { 
+    FreeDepthBuf();
+    Scene_Clean(scene);
+    
+    reset_color_pairs();
+    endwin(); 
+    exit(EXIT_SUCCESS); 
+}
 
 void ToggleBinds(Scene* scene) {
     (void)scene;
-    ShouldRenderBinds = !ShouldRenderBinds;
+    shouldRenderBinds = !shouldRenderBinds;
 }
 
 void InitBinds(void) {
@@ -85,7 +85,7 @@ void PutStr(int bottom, char* str, int color) {
 }
 
 void RenderBinds(void) {
-    if (!ShouldRenderBinds) return;
+    if (!shouldRenderBinds) return;
 
     int height, width;
     getmaxyx(stdscr, height, width);
