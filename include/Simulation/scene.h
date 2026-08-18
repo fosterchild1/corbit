@@ -36,6 +36,7 @@ Planet CreatePlanet(OrbitParams* params, Color* color, char* name);
 
 void UpdateViewAngle(Scene* scene, float rotAmt);
 
-void AddToScene(Scene* scene, Planet* planet);
-void SwitchScene(Scene* scene, char* name);
-void CleanScene(Scene* scene);
+Scene Scene_New(void);
+void Scene_AddPlanet(Scene* scene, Planet* planet);
+void Scene_SwitchSystem(Scene* scene, char* name);
+void Scene_Clean(Scene* scene);

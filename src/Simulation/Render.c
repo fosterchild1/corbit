@@ -43,7 +43,7 @@ void RenderOrbit(Planet planet, Camera camera, Point center) {
         // and that roundX and roundY will be on screen
         if ((fabs(targetY - lastY) < 0.5f && fabs(targetX - lastX) < 0.5f) || 
             (targetY + 0.5f >= yc*2 || targetX + 0.5f >= xc*2)             ||
-            (targetY < 0 || targetX < 0)) continue;
+            (targetY < 0.5f || targetX < 0.5f)) continue;
 
         int roundY = roundf(targetY); int roundX = roundf(targetX);
 
@@ -54,7 +54,7 @@ void RenderOrbit(Planet planet, Camera camera, Point center) {
 
         // put orbit char
         depthBuf[depthIdx] = depth;
-        lastY = targetY; lastX = targetX;
+        lastY = roundY; lastX = roundX;
         mvaddch(roundY, roundX, ':' | COLOR_PAIR(planet.color.colorID+1));
     }
 }

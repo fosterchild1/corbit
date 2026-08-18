@@ -51,17 +51,25 @@ void UpdateViewAngle(Scene* scene, float rotAmt) {
     camera->viewSin = sinf(viewRad); camera->viewCos = cosf(viewRad);
 }
 
-void AddToScene(Scene* scene, Planet* planet) {
+Scene Scene_New(void) {
+    int width, height;
+    getmaxyx(stdscr, height, width);
+
+    return (Scene){.planetArray = Array_New(sizeof(Planet)), .center = {width/2, height/2}, .camera = {90, 1, 1, 0},
+                       .elapsedTime = 0};
+}
+
+void Scene_AddPlanet(Scene* scene, Planet* planet) {
     Array_Insert(&scene->planetArray, planet);
     planet->planetID = scene->planetArray.len;
 }
 
-void SwitchScene(Scene* scene, char* system) {
-    CleanScene(scene);
-    InitScene(scene, system);
+void Scene_SwitchSystem(Scene* scene, char* system) {
+    Scene_Clean(scene);
+    InitScenePlanetsFromSystem(scene, system);
 }
 
-void CleanScene(Scene* scene) {
+void Scene_Clean(Scene* scene) {
     Planet* planets = (Planet*)scene->planetArray.data; (void)planets;
     for (int i = 0; i < scene->planetArray.len; i++) {
         free(planets[i].name);

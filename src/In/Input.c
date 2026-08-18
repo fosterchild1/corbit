@@ -40,7 +40,7 @@ void ZoomOut(Scene* scene) {
 
 void ExitProgram(Scene* scene) { 
     FreeDepthBuf();
-    CleanScene(scene);
+    Scene_Clean(scene);
     
     reset_color_pairs();
     endwin(); 

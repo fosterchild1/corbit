@@ -4,4 +4,4 @@
 
 extern const char* AVAILABLE_SYSTEMS[8];
 
-void InitScene(Scene* scene, char* system);
+void InitScenePlanetsFromSystem(Scene* scene, char* system);

@@ -9,6 +9,7 @@
 
 void Initncurses(void) {
     setlocale(LC_ALL, "");
+
     initscr();
     noecho();
     cbreak(); 
@@ -24,19 +25,14 @@ void Initncurses(void) {
     keypad(stdscr, TRUE);
 }
 
+
 int main(int charc, char* argv[]) {
     CLIConfig config = ParseCLI(charc, argv);
     Initncurses();
     InitBinds();
     
-    // init scene
-    int width, height;
-    getmaxyx(stdscr, height, width);
-
-    Scene mainScene = {.planetArray = Array_New(sizeof(Planet)), .center = {width/2, height/2}, .camera = {90, 1, 1, 0},
-                       .elapsedTime = 0};
-
-    InitScene(&mainScene, config.system);
+    Scene mainScene = Scene_New();
+    InitScenePlanetsFromSystem(&mainScene, config.system);
 
     while (true) {
         RenderScene(mainScene);
