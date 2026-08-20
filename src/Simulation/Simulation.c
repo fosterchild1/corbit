@@ -16,34 +16,40 @@ void SwitchRandomSystem(Scene* scene) {
     lastSystemChange = time(NULL);
 }
 
-void StepSimulation(Scene* scene, int delta, bool isScreensaver) {
-    scene->elapsedTime += delta;
-    float timeSeconds = delta/100.0;
+double WrapTAU(double angle) {
+    double w = fmod(angle, M_TAU);
+    return (w < 0.0 ? w + M_TAU : w);
+}
 
-    // advance planet deltas
+void AdvancePlanets(Scene* scene, float delta) {
     for (int i = 0; i < scene->planetArray.len; i++) {
         Planet* planet = ((Planet**)scene->planetArray.data)[i];
         OrbitParams* orbit = &planet->orbitparams;
 
         // get delta and keep between 0-tau
-        double deltaOrbit = M_TAU/sqrt(pow(orbit->smaxis, 3)) * timeSeconds;
-        orbit->mna += deltaOrbit;
-        if (orbit->mna > M_TAU) orbit->mna -= M_TAU;
+        double deltaOrbit = M_TAU/sqrt(pow(orbit->smaxis, 3)) * delta;
+        orbit->mna = WrapTAU(orbit->mna + deltaOrbit);
     }
+}
 
-    // handle screensaver mode
-    // TODO: change these hardcoded values
-    if (!isScreensaver) return;
-    // rotate camera slightly each step
-    RotateScene(scene, 0, 0, 0.001 * delta);
+void AdvanceScreensaver(Scene* scene, float delta) {
+    RotateScene(scene, 0, 0, delta/10.0);
 
     Camera sceneCam = scene->camera;
-    sceneCam.viewAngle += 0.01 * delta;
-    if (sceneCam.viewAngle > 360) sceneCam.viewAngle-=360;
+    sceneCam.viewAngle = fmod(sceneCam.viewAngle + delta, 360);
 
     // system changing for screensaver
     if (lastSystemChange == 0) lastSystemChange = time(NULL);
     if (time(NULL) - lastSystemChange >= TIME_BETWEEN_CHANGE) SwitchRandomSystem(scene);
+}
+
+void StepSimulation(Scene* scene, int delta, bool isScreensaver) {
+    scene->elapsedTime += delta;
+    float deltaSeconds = delta/100.0;
+    AdvancePlanets(scene, deltaSeconds);
+    
+    if (!isScreensaver) return;
+    AdvanceScreensaver(scene, deltaSeconds);
 }
 
 void RotateScene(Scene* scene, float lpe, float lan, float inc) {
@@ -51,12 +57,8 @@ void RotateScene(Scene* scene, float lpe, float lan, float inc) {
         Planet* planet = ((Planet**)scene->planetArray.data)[i];
         OrbitParams* orbit = &planet->orbitparams;
 
-        orbit->lpe += lpe;
-        orbit->lan += lan;
-        orbit->inclination += inc;
-
-        if (orbit->lpe > M_TAU) orbit->lpe -= M_TAU;
-        if (orbit->lan > M_TAU) orbit->lan -= M_TAU;
-        if (orbit->inclination > M_TAU) orbit->inclination -= M_TAU;
+        orbit->lpe = WrapTAU(orbit->lpe + lpe);
+        orbit->lan = WrapTAU(orbit->lan + lan);
+        orbit->inclination = WrapTAU(orbit->inclination + inc);
     } 
 }

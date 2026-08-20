@@ -35,7 +35,7 @@ void DisplayHelpText(void) {
         if (i == systemCount - 1)
             puts(systemNames[i]);
         else 
-            printf("%s, ", systemNames[i]);
+            printf("%s, ", systemNames[i]); 
     }
     
     FreeAvailableSystems();
@@ -91,7 +91,8 @@ CLIConfig ParseCLI(int argc, char* argv[]) {
         HandleArgument(&config, lastArg, NULL);
     }
 
-    if (config.screensaver) ToggleBinds((Scene*)1); // hide keybinds, cast to Scene* as it isnt used anyway
+    if (config.screensaver) ToggleBinds(NULL); // Scene* isnt used anyway
+                                                       
     
     return config;
 }

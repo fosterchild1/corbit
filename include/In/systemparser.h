@@ -2,8 +2,6 @@
 
 #include "Simulation/scene.h"
 
-#define SYSTEM_NAME_SIZE 4;
-
 extern Array* AVAILABLE_SYSTEMS;
 
 void ScanAvailableSystems(void);

@@ -5,7 +5,9 @@
 #include "Simulation/scene.h"
 #include "Utils/util.h"
 
-static short colorID=16;
+static const int8_t DEFAULT_COLOR_COUNT = 16;
+
+static int8_t colorID = DEFAULT_COLOR_COUNT;
 
 void InitPlanetColors(short id, Color color) {
     // convert them into ncurses format
@@ -29,7 +31,7 @@ Planet CreatePlanet(OrbitParams* orbit, Color* color, char* name) {
     // initialize color
     if (colorID > COLORS) {
         // color limit reached, choose random one
-        color->colorID = RandInt(17, COLORS);
+        color->colorID = RandInt(DEFAULT_COLOR_COUNT + 1, COLORS);
     } else {
         InitPlanetColors(colorID, *color);
         color->colorID = colorID;
@@ -66,7 +68,7 @@ void Scene_AddPlanet(Scene* scene, Planet* planet) {
 void Scene_SwitchSystem(Scene* scene, const char* system) {
     Scene_Clean(scene);
 
-    reset_color_pairs(); colorID = 16;
+    reset_color_pairs(); colorID = DEFAULT_COLOR_COUNT;
     
     InitScenePlanetsFromSystem(scene, system);
 }
