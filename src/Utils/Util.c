@@ -69,6 +69,7 @@ Color HexToRGB(int hex) {
 
 void Initncurses(void) {
     setlocale(LC_ALL, "");
+    setlocale(LC_NUMERIC, "C");
 
     initscr();
     noecho();

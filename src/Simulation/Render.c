@@ -11,7 +11,7 @@ static int8_t* depthBuf;
 
 const wchar_t PLANET_CHAR[2] = {9679, '\0'};
 
-void RenderOrbit(const Planet planet, const Camera camera, const Point center) {
+void RenderOrbit(Planet planet, Camera camera, Point center) {
     OrbitParams orbit = planet.orbitparams;
     float ecc = orbit.eccentricity;
 
@@ -23,7 +23,7 @@ void RenderOrbit(const Planet planet, const Camera camera, const Point center) {
 
     int a = orbit.smaxis * camera.zoom;
     int b = (int)(sqrt(1 - ecc*ecc) * a); // semi minor axis
-
+    mvprintw(10, 10, "%d, %d, %f", a, b, ecc);
     float step = 1.0f/max(a, b);
 
     int xc = center.x; int xSize = xc * 2;

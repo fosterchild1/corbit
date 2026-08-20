@@ -2,11 +2,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <ncurses.h>
 #include "Simulation/scene.h"
 #include "Utils/util.h"
 
 /* example system:
-.sol
+,sol
 -Mercury
 #mna 0.91
 #lan 4.15
@@ -67,6 +68,7 @@ char* ReadString(const char* str, int startIdx, int len) {
         
         int nameLen = p - (str + startIdx);
         char* name = Strsub(str, startIdx, startIdx + nameLen);
+        mvprintw(startIdx/4, 30, "%s", name);
         return name;
     }
 
@@ -94,7 +96,7 @@ void ScanAvailableSystems(void) {
     int currIdx = 0;
 
     while (true) {
-        int nameStartIdx = FindNextChar(contents, '.', currIdx, contentsLen);
+        int nameStartIdx = FindNextChar(contents, ',', currIdx, contentsLen);
         if (nameStartIdx == -1) break;
 
         char* systemName = ReadString(contents, nameStartIdx + 1, contentsLen);
@@ -121,7 +123,7 @@ char* GetSystemConfig(char* contents, const char* system) {
 
     // find system, denoted by .systemname
     while (true) {
-        int nameStartIdx = FindNextChar(contents, '.', currIdx, contentsLen);
+        int nameStartIdx = FindNextChar(contents, ',', currIdx, contentsLen);
         if (nameStartIdx == -1) return "";
         currIdx = nameStartIdx + 1;
 
@@ -134,7 +136,7 @@ char* GetSystemConfig(char* contents, const char* system) {
     }
     
     // find where the system config ends, either from the next system or by end of file
-    int nextSystemIdx = FindNextChar(contents, '.', currIdx, contentsLen);
+    int nextSystemIdx = FindNextChar(contents, ',', currIdx, contentsLen);
     nextSystemIdx = (nextSystemIdx == -1) ? contentsLen - 1 : nextSystemIdx;
 
     return Strsub(contents, currIdx, nextSystemIdx);
@@ -156,7 +158,7 @@ Planet MakePlanetFromConfig(char* name, const char* config, int startIdx, int en
         currIdx += strlen(keyName) + 1;
 
         char* strValue = ReadString(config, currIdx, endIdx);
-        double value = strtod(strValue, NULL); 
+        double value = strtod(strValue, NULL);
         if (strcmp(strValue, "") != 0) free(strValue); // free strValue if succesfully malloc'd
 
         // super ugly

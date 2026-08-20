@@ -16,7 +16,7 @@ void SwitchRandomSystem(Scene* scene) {
     lastSystemChange = time(NULL);
 }
 
-double WrapTAU(double angle) {
+double ClampTAU(double angle) {
     double w = fmod(angle, M_TAU);
     return (w < 0.0 ? w + M_TAU : w);
 }
@@ -28,7 +28,7 @@ void AdvancePlanets(Scene* scene, float delta) {
 
         // get delta and keep between 0-tau
         double deltaOrbit = M_TAU/sqrt(pow(orbit->smaxis, 3)) * delta;
-        orbit->mna = WrapTAU(orbit->mna + deltaOrbit);
+        orbit->mna = ClampTAU(orbit->mna + deltaOrbit);
     }
 }
 
@@ -57,8 +57,8 @@ void RotateScene(Scene* scene, float lpe, float lan, float inc) {
         Planet* planet = ((Planet**)scene->planetArray.data)[i];
         OrbitParams* orbit = &planet->orbitparams;
 
-        orbit->lpe = WrapTAU(orbit->lpe + lpe);
-        orbit->lan = WrapTAU(orbit->lan + lan);
-        orbit->inclination = WrapTAU(orbit->inclination + inc);
+        orbit->lpe = ClampTAU(orbit->lpe + lpe);
+        orbit->lan = ClampTAU(orbit->lan + lan);
+        orbit->inclination = ClampTAU(orbit->inclination + inc);
     } 
 }
