@@ -3,6 +3,7 @@
 #include <ncurses.h>
 #include <math.h>
 #include <string.h>
+#include <stdalign.h>
 #include "Simulation/scene.h"
 #include "Utils/util.h"
 
@@ -10,7 +11,7 @@ static int8_t* depthBuf;
 
 const wchar_t PLANET_CHAR[2] = {9679, '\0'};
 
-void RenderOrbit(Planet planet, Camera camera, Point center) {
+void RenderOrbit(const Planet planet, const Camera camera, const Point center) {
     OrbitParams orbit = planet.orbitparams;
     float ecc = orbit.eccentricity;
 
@@ -25,10 +26,12 @@ void RenderOrbit(Planet planet, Camera camera, Point center) {
 
     float step = 1.0f/max(a, b);
 
-    int xc = center.x;
-    int yc = center.y;
+    int xc = center.x; int xSize = xc * 2;
+    int yc = center.y; int ySize = yc * 2;
 
     // render elipse
+    attron(COLOR_PAIR(planet.color.colorID+1));
+
     int lastY = 0; int lastX = 0;
     for (float theta = 0.0; theta < M_TAU; theta += step) {
         // get camera x and y
@@ -42,24 +45,26 @@ void RenderOrbit(Planet planet, Camera camera, Point center) {
         // ensure the difference is enough for the orbit char to not overlap with the previous
         // and that roundX and roundY will be on screen
         if ((fabs(targetY - lastY) < 0.5f && fabs(targetX - lastX) < 0.5f) || 
-            (targetY + 0.5f >= yc*2 || targetX + 0.5f >= xc*2)             ||
-            (targetY < 0.5f || targetX < 0.5f)) continue;
+            (targetY + 0.5f >= ySize || targetX + 0.5f >= xSize)             ||
+            (targetY < 0 || targetX < 0)) continue;
 
         int roundY = roundf(targetY); int roundX = roundf(targetX);
 
         // get depth
         int8_t depth = point.y * camera.viewCos + point.z * camera.viewSin;
-        int depthIdx = (roundY * xc * 2) + roundX;
+        int depthIdx = (roundY * xSize) + roundX;
         if (depthBuf[depthIdx] <= depth) continue;
 
         // put orbit char
         depthBuf[depthIdx] = depth;
         lastY = roundY; lastX = roundX;
-        mvaddch(roundY, roundX, ':' | COLOR_PAIR(planet.color.colorID+1));
+        mvaddch(roundY, roundX, ':');
     }
+    
+    attroff(COLOR_PAIR(planet.color.colorID+1));
 }
 
-void RenderPlanet(Planet planet, Camera camera, Point center) {
+void RenderPlanet(const Planet planet, const Camera camera, const Point center) {
     OrbitParams orbit = planet.orbitparams;
     float ecc = orbit.eccentricity;
 
@@ -93,23 +98,23 @@ void RenderPlanet(Planet planet, Camera camera, Point center) {
     attroff(COLOR_PAIR(planet.color.colorID));
 }
 
-void RenderScene(Scene scene) {
+void RenderScene(const Scene scene) {
     Point center = scene.center;
-    Planet* planets = (Planet*)scene.planetArray.data;
+    Planet** planets = (Planet**)scene.planetArray.data;
 
     // handle depth buffer
-    int bufSize = center.x * center.y * 4;
-    if (depthBuf == NULL) depthBuf = Safemalloc(bufSize * sizeof(int8_t));
+    int bufSize = center.x * center.y * 4 * sizeof(int8_t);
+    if (depthBuf == NULL) depthBuf = Safemalloc(bufSize);
     memset(depthBuf, INT8_MAX, bufSize);
 
     // render planet orbits
     for (int i = 0; i < scene.planetArray.len; i++) {
-        RenderOrbit(planets[i], scene.camera, center);
+        RenderOrbit(*planets[i], scene.camera, center);
     }
 
     // render planets and their names above the orbits
     for (int i = 0; i < scene.planetArray.len; i++) {
-        RenderPlanet(planets[i], scene.camera, center);
+        RenderPlanet(*planets[i], scene.camera, center);
     }
 
     mvaddch(center.y, center.x, '*');

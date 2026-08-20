@@ -30,7 +30,6 @@ Planet CreatePlanet(OrbitParams* orbit, Color* color, char* name) {
     if (colorID > COLORS) {
         // color limit reached, choose random one
         color->colorID = RandInt(17, COLORS);
-
     } else {
         InitPlanetColors(colorID, *color);
         color->colorID = colorID;
@@ -55,24 +54,28 @@ Scene Scene_New(void) {
     int width, height;
     getmaxyx(stdscr, height, width);
 
-    return (Scene){.planetArray = Array_New(sizeof(Planet)), .center = {width/2, height/2}, .camera = {90, 1, 1, 0},
+    return (Scene){.planetArray = Array_New(sizeof(Planet*)), .center = {width/2, height/2}, .camera = {90, 1, 1, 0},
                        .elapsedTime = 0};
 }
 
 void Scene_AddPlanet(Scene* scene, Planet* planet) {
-    Array_Insert(&scene->planetArray, planet);
+    Array_Insert(&scene->planetArray, &planet);
     planet->planetID = scene->planetArray.len;
 }
 
-void Scene_SwitchSystem(Scene* scene, char* system) {
+void Scene_SwitchSystem(Scene* scene, const char* system) {
     Scene_Clean(scene);
+
+    reset_color_pairs(); colorID = 16;
+    
     InitScenePlanetsFromSystem(scene, system);
 }
 
 void Scene_Clean(Scene* scene) {
-    Planet* planets = (Planet*)scene->planetArray.data; (void)planets;
+    Planet** planets = (Planet**)scene->planetArray.data;
     for (int i = 0; i < scene->planetArray.len; i++) {
-        free(planets[i].name);
+        free(planets[i]->name);
+        free(planets[i]);
     }
 
     Array_Free(&scene->planetArray);

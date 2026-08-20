@@ -38,5 +38,5 @@ void UpdateViewAngle(Scene* scene, float rotAmt);
 
 Scene Scene_New(void);
 void Scene_AddPlanet(Scene* scene, Planet* planet);
-void Scene_SwitchSystem(Scene* scene, char* name);
+void Scene_SwitchSystem(Scene* scene, const char* name);
 void Scene_Clean(Scene* scene);

@@ -14,9 +14,9 @@
 */
 
 const char* SYSTEMS_DIR = "/.config/corbit/systems";
-const char* AVAILABLE_SYSTEMS[8] = {"sol", "jov", "sat", "ura", "nep", "plu", "ker", "sph"};
+Array* AVAILABLE_SYSTEMS = NULL;
 
-char* ReadFile(char* dir) {
+char* ReadFile(const char* dir) {
     FILE* file = fopen(dir, "r");
     if (file == NULL) return "";
 
@@ -47,21 +47,19 @@ char* ReadSystemsFile(void) {
     return ReadFile(fileDir);
 }
 
-int FindNextChar(char* str, char ch, int startIdx, int len) {
+int FindNextChar(const char* str, char ch, int startIdx, int len) {
     if (startIdx + 1 > len) return -1;
-    char* p = str + startIdx;
 
-    while (*p != '\0') {
-        if (*p == ch) return p - str;
-        p++;
+    for (int i = startIdx; i < len; i++) {
+        if (str[i] == ch) return i;
     }
 
     return -1;
 }
 
-char* ReadString(char* str, int startIdx, int len) {
+char* ReadString(const char* str, int startIdx, int len) {
     if (startIdx + 1 > len) return "";
-    char* p = str + startIdx;
+    const char* p = str + startIdx;
     
     // loop till next space/newline
     while (*p != '\0') {
@@ -87,7 +85,37 @@ void HandleOrbitProperty(OrbitParams* orbit, char* keyName, double value) {
     if (strcmp(keyName, "") != 0) free(keyName); // free only if malloc'd
 }
 
-char* GetSystemConfig(char* contents, char* system) {
+void ScanAvailableSystems(void) {
+    AVAILABLE_SYSTEMS = malloc(sizeof(Array));
+    *AVAILABLE_SYSTEMS = Array_New(sizeof(char*));
+
+    char* contents = ReadSystemsFile();
+    int contentsLen = strlen(contents);
+    int currIdx = 0;
+
+    while (true) {
+        int nameStartIdx = FindNextChar(contents, '.', currIdx, contentsLen);
+        if (nameStartIdx == -1) break;
+
+        char* systemName = ReadString(contents, nameStartIdx + 1, contentsLen);
+        currIdx = nameStartIdx + 1 + strlen(systemName);
+        Array_Insert(AVAILABLE_SYSTEMS, &systemName);
+    }
+
+    free(contents);
+}
+
+void FreeAvailableSystems(void) {
+    // free array and strings
+    char** systemNames = (char**)AVAILABLE_SYSTEMS->data;
+    for (int i = 0; i < AVAILABLE_SYSTEMS->len; i++) {
+        free(systemNames[i]);
+    }
+
+    Array_Free(AVAILABLE_SYSTEMS); free(AVAILABLE_SYSTEMS);
+}
+
+char* GetSystemConfig(char* contents, const char* system) {
     int currIdx = 0;
     int contentsLen = strlen(contents);
 
@@ -112,7 +140,7 @@ char* GetSystemConfig(char* contents, char* system) {
     return Strsub(contents, currIdx, nextSystemIdx);
 }
 
-Planet MakePlanetFromConfig(char* name, char* config, int startIdx, int endIdx) {
+Planet MakePlanetFromConfig(char* name, const char* config, int startIdx, int endIdx) {
     OrbitParams orbit = {0, 0, 0, 0, 0, 0};
     Color color = {255, 255, 255, 0};
 
@@ -139,7 +167,7 @@ Planet MakePlanetFromConfig(char* name, char* config, int startIdx, int endIdx) 
     return CreatePlanet(&orbit, &color, name);
 }
 
-void InitScenePlanetsFromSystem(Scene* scene, char* system) {
+void InitScenePlanetsFromSystem(Scene* scene, const char* system) {
     char* contents = ReadSystemsFile();
     char* systemConfig = GetSystemConfig(contents, system);
     if (strcmp(systemConfig, "") == 0) return;
@@ -160,11 +188,12 @@ void InitScenePlanetsFromSystem(Scene* scene, char* system) {
         int nextPlanetIdx = FindNextChar(systemConfig, '-', currIdx, configLen);
         nextPlanetIdx = (nextPlanetIdx == -1) ? configLen - 1 : nextPlanetIdx;
 
-        Planet planet = MakePlanetFromConfig(planetName, systemConfig, currIdx, nextPlanetIdx);
-        Scene_AddPlanet(scene, &planet);
+        Planet* planet = Safemalloc(sizeof(Planet));
+        *planet = MakePlanetFromConfig(planetName, systemConfig, currIdx, nextPlanetIdx);
+        Scene_AddPlanet(scene, planet);
 
         #ifdef BENCH
-            for (int i = 0; i < 500; i++) AddToScene(scene, &planet);
+            for (int i = 0; i < 500; i++) Scene_AddPlanet(scene, planet);
         #endif
     }
 

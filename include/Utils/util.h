@@ -15,14 +15,15 @@
 #define DimColor(c) (((c) > 35) ? ((c) - 35) : 0)
 
 float CalculateEccentricAnomaly(double mna, float ecc);
-FPoint3 GetPointOnElipse(float xLocal, float yLocal, float trigArr[6]);
+FPoint3 GetPointOnElipse(float xLocal, float yLocal, const float trigArr[6]);
 
 int RandInt(int min, int max);
 
-char* Strsub(char* str, int startIdx, int endIdx);
+char* Strsub(const char* str, int startIdx, int endIdx);
 
 void* Safemalloc(size_t size);
 
 Color HexToRGB(int hex);
 
+void Initncurses(void);
 void InitDefaultColorPairs(void);

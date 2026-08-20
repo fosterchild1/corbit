@@ -7,14 +7,14 @@ Array Array_New(int elementSize) {
 }
 
 // TODO: insert at index
-void Array_Insert(Array* array, void* element) {
+void Array_Insert(Array* array, const void* element) {
     int currSize = array->capacity;
     int neededSize = array->len + 1;
     
     // resize if needed
     if (neededSize > currSize) {
         int newSize = currSize * 2;
-        if (currSize == 0) newSize = 1;
+        if (currSize == 0) newSize = 2;
 
         void* temp = realloc(array->data, array->elementSize * newSize);
         if (temp == NULL) exit(EXIT_FAILURE);
@@ -23,6 +23,7 @@ void Array_Insert(Array* array, void* element) {
         array->capacity = newSize;
     }
 
+    // copy into array
     array->len++;
     void* elementIdx = (char*)array->data + array->elementSize * (neededSize - 1);
     memcpy(elementIdx, element, array->elementSize);

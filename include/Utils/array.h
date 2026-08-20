@@ -9,6 +9,6 @@ typedef struct {
 
 Array Array_New(int elementSize);
 
-void Array_Insert(Array* array, void* element);
+void Array_Insert(Array* array, const void* element);
 void* Array_Remove(Array* array, int index);
 void Array_Free(Array* array);

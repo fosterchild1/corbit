@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "In/input.h"
+#include "In/systemparser.h"
 #include "Simulation/render.h"
 #include "Simulation/simulation.h"
 #include "Utils/util.h"
@@ -39,9 +40,9 @@ void ZoomOut(Scene* scene) {
 }
 
 void ExitProgram(Scene* scene) { 
-    FreeDepthBuf();
+    FreeDepthBuf(); FreeAvailableSystems();
     Scene_Clean(scene);
-    
+
     reset_color_pairs();
     endwin(); 
     exit(EXIT_SUCCESS); 

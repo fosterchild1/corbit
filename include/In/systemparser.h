@@ -2,6 +2,11 @@
 
 #include "Simulation/scene.h"
 
-extern const char* AVAILABLE_SYSTEMS[8];
+#define SYSTEM_NAME_SIZE 4;
 
-void InitScenePlanetsFromSystem(Scene* scene, char* system);
+extern Array* AVAILABLE_SYSTEMS;
+
+void ScanAvailableSystems(void);
+void FreeAvailableSystems(void);
+
+void InitScenePlanetsFromSystem(Scene* scene, const char* system);

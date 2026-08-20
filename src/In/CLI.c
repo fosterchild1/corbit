@@ -27,18 +27,22 @@ int ContainsEqual(char* str) {
 void DisplayHelpText(void) {
     printf("%s", HELP_TEXT);
 
-    int arrSize = sizeof(AVAILABLE_SYSTEMS) / sizeof(AVAILABLE_SYSTEMS[0]);
-    for (int i = 0; i < arrSize; i++) {
-        if (i == arrSize - 1)
-            puts(AVAILABLE_SYSTEMS[i]);
-        else 
-            printf("%s,", AVAILABLE_SYSTEMS[i]);
-    }
+    // enumerate all system names to the end
+    char** systemNames = (char**)AVAILABLE_SYSTEMS->data;
+    int systemCount = AVAILABLE_SYSTEMS->len;
 
+    for (int i = 0; i < systemCount; i++) {
+        if (i == systemCount - 1)
+            puts(systemNames[i]);
+        else 
+            printf("%s, ", systemNames[i]);
+    }
+    
+    FreeAvailableSystems();
     exit(EXIT_SUCCESS);
 }
 
-void HandleArgument(CLIConfig* config, char* key, char* value) {
+void HandleArgument(CLIConfig* config, const char* key, char* value) {
     // mega ugly
     // non-value arguments
     if (strcmp(key, "h")==0 || strcmp(key, "help")==0) DisplayHelpText();

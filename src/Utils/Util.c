@@ -1,9 +1,11 @@
 #include <math.h>
 #include <ncurses.h>
+#include <locale.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include "Simulation/scene.h"
+#include "Utils/util.h"
 
 float CalculateEccentricAnomaly(double mna, float ecc) {
     // use newton-raphson to approximate E.
@@ -21,7 +23,7 @@ float CalculateEccentricAnomaly(double mna, float ecc) {
     return E;
 }
 
-FPoint3 GetPointOnElipse(float xLocal, float yLocal, float trigArr[6]) {
+FPoint3 GetPointOnElipse(float xLocal, float yLocal, const float trigArr[6]) {
     float sinOmega = trigArr[0]; float cosOmega = trigArr[1];
     float sinLan = trigArr[2]; float cosLan = trigArr[3];
     float sinInc = trigArr[4]; float cosInc = trigArr[5];
@@ -35,7 +37,7 @@ FPoint3 GetPointOnElipse(float xLocal, float yLocal, float trigArr[6]) {
 }
 
 int RandInt(int min, int max) {
-    return rand() % (max - min + 2);
+    return rand() % (max - min + 1) + min;
 }
 
 void* Safemalloc(size_t size) {
@@ -47,8 +49,7 @@ void* Safemalloc(size_t size) {
     return p;
 }
 
-
-char* Strsub(char* str, int startIdx, int endIdx) {
+char* Strsub(const char* str, int startIdx, int endIdx) {
     if (endIdx <= startIdx) return "";
 
     int len = endIdx - startIdx;
@@ -64,6 +65,24 @@ Color HexToRGB(int hex) {
     int g = (hex >> 8) & 0xFF;
     int b = hex & 0xFF;
     return (Color){r, g, b, 0};
+}
+
+void Initncurses(void) {
+    setlocale(LC_ALL, "");
+
+    initscr();
+    noecho();
+    cbreak(); 
+    curs_set(0);
+
+    if (has_colors()) {
+        start_color();
+        use_default_colors();
+        InitDefaultColorPairs();
+    }
+
+    nodelay(stdscr, TRUE);
+    keypad(stdscr, TRUE);
 }
 
 void InitDefaultColorPairs(void) {
